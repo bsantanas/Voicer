@@ -1,26 +1,148 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11134" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="tRc-dJ-NEw">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11106"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
-        <scene sceneID="tne-QT-ifu">
+        <!--Table View Controller-->
+        <scene sceneID="O73-JW-5hG">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
-                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                <tableViewController id="yo3-e4-xTn" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="229" sectionHeaderHeight="28" sectionFooterHeight="28" id="cHK-Mf-3OM">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="noteCell" rowHeight="229" id="Oo1-pd-cvP">
+                                <rect key="frame" x="0.0" y="92" width="375" height="229"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Oo1-pd-cvP" id="fr1-h9-fKT">
+                                    <frame key="frameInset" width="375" height="228"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ukS-P8-byA">
+                                            <state key="normal" title="Play"/>
+                                        </button>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="ukS-P8-byA" firstAttribute="centerX" secondItem="fr1-h9-fKT" secondAttribute="centerX" id="5Cm-tQ-MMo"/>
+                                        <constraint firstItem="ukS-P8-byA" firstAttribute="centerY" secondItem="fr1-h9-fKT" secondAttribute="centerY" id="J0T-DX-dIB"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="yo3-e4-xTn" id="7gH-9v-b8f"/>
+                            <outlet property="delegate" destination="yo3-e4-xTn" id="S4M-yL-dJp"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="kkA-XZ-sGG">
+                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="add" id="vAE-pl-WoV">
+                            <connections>
+                                <segue destination="4fk-5o-rvU" kind="presentation" identifier="feedToAddNote" id="78C-bl-GoR"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="CmV-Ld-sWZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="1048.8" y="93.103448275862078"/>
+        </scene>
+        <!--New Note-->
+        <scene sceneID="jch-JJ-jaH">
+            <objects>
+                <viewController id="Jan-d9-nEw" customClass="AddNoteViewController" customModule="Voicer" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Mbx-oT-Ug1"/>
+                        <viewControllerLayoutGuide type="bottom" id="m3H-0n-M9z"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="kjC-j8-eDS">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="frb-rm-ehR">
+                                <state key="normal" title="Playback"/>
+                                <connections>
+                                    <action selector="playbackNote:" destination="Jan-d9-nEw" eventType="touchUpInside" id="11v-2x-xht"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WUc-CD-IrC">
+                                <state key="normal" title="Record"/>
+                                <connections>
+                                    <action selector="beginRecordingNote:" destination="Jan-d9-nEw" eventType="touchDown" id="sHu-dS-M5e"/>
+                                    <action selector="cancelRecordingNote:" destination="Jan-d9-nEw" eventType="touchUpOutside" id="BiF-3w-D0i"/>
+                                    <action selector="finishRecordingNote:" destination="Jan-d9-nEw" eventType="touchUpInside" id="iym-5a-teq"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="WUc-CD-IrC" firstAttribute="centerY" secondItem="kjC-j8-eDS" secondAttribute="centerY" multiplier="0.7" id="625-Mx-yfJ"/>
+                            <constraint firstItem="WUc-CD-IrC" firstAttribute="centerX" secondItem="kjC-j8-eDS" secondAttribute="centerX" id="W7L-h3-BL1"/>
+                            <constraint firstItem="frb-rm-ehR" firstAttribute="centerY" secondItem="kjC-j8-eDS" secondAttribute="centerY" multiplier="1.7" id="cxU-3S-Bwc"/>
+                            <constraint firstItem="frb-rm-ehR" firstAttribute="centerX" secondItem="kjC-j8-eDS" secondAttribute="centerX" id="syc-1t-sbQ"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="New Note" id="VOj-6g-03M">
+                        <barButtonItem key="leftBarButtonItem" style="plain" systemItem="cancel" id="em1-tG-u73">
+                            <connections>
+                                <segue destination="OJJ-td-1pS" kind="unwind" unwindAction="cancelToTableViewControllerWithSegue:" id="q9f-ji-f16"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="done" id="09r-oB-bq1">
+                            <connections>
+                                <segue destination="OJJ-td-1pS" kind="unwind" unwindAction="saveNewNoteWithSegue:" id="KkC-gp-UGD"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="playbackButton" destination="frb-rm-ehR" id="Anb-Nd-J0n"/>
+                        <outlet property="recordButton" destination="WUc-CD-IrC" id="xhX-h2-xJW"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7Ae-I4-wgN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="OJJ-td-1pS" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="2964" y="92.203898050974516"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="pzA-Ac-Od4">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="tRc-dJ-NEw" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="qxu-Eh-HSL">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="yo3-e4-xTn" kind="relationship" relationship="rootViewController" id="RDH-Iu-8bu"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="de1-rz-rvk" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="109.59999999999999" y="93.103448275862078"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="kxH-hk-TQk">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="4fk-5o-rvU" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="6ry-i7-7pk">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="Jan-d9-nEw" kind="relationship" relationship="rootViewController" id="XU7-1y-FBP"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="JGF-uG-OWh" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2024.8" y="92.203898050974516"/>
         </scene>
     </scenes>
 </document>
