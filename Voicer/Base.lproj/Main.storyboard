@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -10,28 +11,49 @@
         <!--Table View Controller-->
         <scene sceneID="O73-JW-5hG">
             <objects>
-                <tableViewController id="yo3-e4-xTn" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="229" sectionHeaderHeight="28" sectionFooterHeight="28" id="cHK-Mf-3OM">
+                <tableViewController id="yo3-e4-xTn" customClass="TableViewController" customModule="Voicer" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="72" sectionHeaderHeight="28" sectionFooterHeight="28" id="cHK-Mf-3OM">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="noteCell" rowHeight="229" id="Oo1-pd-cvP">
-                                <rect key="frame" x="0.0" y="92" width="375" height="229"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="noteCell" rowHeight="72" id="Oo1-pd-cvP" customClass="NoteCell" customModule="Voicer" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="92" width="375" height="72"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Oo1-pd-cvP" id="fr1-h9-fKT">
-                                    <frame key="frameInset" width="375" height="228"/>
+                                    <frame key="frameInset" width="375" height="71"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ukS-P8-byA">
                                             <state key="normal" title="Play"/>
+                                            <connections>
+                                                <action selector="buttonTapWithSender:" destination="Oo1-pd-cvP" eventType="touchUpInside" id="Dpr-IN-ZiM"/>
+                                            </connections>
                                         </button>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y1h-s2-Xmi">
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dKT-Dq-xYS">
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                            <color key="textColor" red="0.53160511363636365" green="0.53160511363636365" blue="0.53160511363636365" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="ukS-P8-byA" firstAttribute="centerX" secondItem="fr1-h9-fKT" secondAttribute="centerX" id="5Cm-tQ-MMo"/>
+                                        <constraint firstItem="y1h-s2-Xmi" firstAttribute="leading" secondItem="fr1-h9-fKT" secondAttribute="leadingMargin" id="2fy-KK-21l"/>
+                                        <constraint firstItem="ukS-P8-byA" firstAttribute="trailing" secondItem="fr1-h9-fKT" secondAttribute="trailingMargin" id="FQo-ff-p1a"/>
                                         <constraint firstItem="ukS-P8-byA" firstAttribute="centerY" secondItem="fr1-h9-fKT" secondAttribute="centerY" id="J0T-DX-dIB"/>
+                                        <constraint firstItem="y1h-s2-Xmi" firstAttribute="leading" secondItem="dKT-Dq-xYS" secondAttribute="leading" id="Nzp-ZH-PlJ"/>
+                                        <constraint firstItem="dKT-Dq-xYS" firstAttribute="bottom" secondItem="fr1-h9-fKT" secondAttribute="bottomMargin" id="ad6-IM-1VR"/>
+                                        <constraint firstItem="y1h-s2-Xmi" firstAttribute="top" secondItem="fr1-h9-fKT" secondAttribute="topMargin" id="tG2-KS-XbN"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="dateLabel" destination="dKT-Dq-xYS" id="hAm-jg-jhy"/>
+                                    <outlet property="titleLabel" destination="y1h-s2-Xmi" id="wbM-LV-zKy"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -40,7 +62,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="kkA-XZ-sGG">
-                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="add" id="vAE-pl-WoV">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="vAE-pl-WoV">
                             <connections>
                                 <segue destination="4fk-5o-rvU" kind="presentation" identifier="feedToAddNote" id="78C-bl-GoR"/>
                             </connections>
@@ -87,14 +109,16 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="New Note" id="VOj-6g-03M">
-                        <barButtonItem key="leftBarButtonItem" style="plain" systemItem="cancel" id="em1-tG-u73">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="em1-tG-u73">
                             <connections>
-                                <segue destination="OJJ-td-1pS" kind="unwind" unwindAction="cancelToTableViewControllerWithSegue:" id="q9f-ji-f16"/>
+                                <action selector="cancelButtonTapped:" destination="Jan-d9-nEw" id="Hkd-Im-99Z"/>
+                                <segue destination="OJJ-td-1pS" kind="unwind" unwindAction="unwindToHome:" id="PYf-xV-KTQ"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="done" id="09r-oB-bq1">
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="09r-oB-bq1">
                             <connections>
-                                <segue destination="OJJ-td-1pS" kind="unwind" unwindAction="saveNewNoteWithSegue:" id="KkC-gp-UGD"/>
+                                <action selector="doneButtonTapped:" destination="Jan-d9-nEw" id="UOA-fb-iB4"/>
+                                <segue destination="OJJ-td-1pS" kind="unwind" unwindAction="unwindToHome:" id="Gvu-2h-AmO"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>

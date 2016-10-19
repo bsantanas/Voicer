@@ -8,17 +8,22 @@
 
 import UIKit
 import AVFoundation
+import RealmSwift
 
 class AddNoteViewController: UIViewController {
     
     @IBOutlet weak var recordButton: UIButton!
     @IBOutlet weak var playbackButton: UIButton!
+    var identifier: String!
     var audioRecorder: AVAudioRecorder!
     var audioPlayer: AVAudioPlayer!
-
+    var note: Note?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        identifier = String(arc4random()) + ".m4a"
+        
         let recordingSession = AVAudioSession.sharedInstance()
         
         do {
@@ -38,9 +43,9 @@ class AddNoteViewController: UIViewController {
             // failed to get permissions!
         }
     }
-
+    
     func prepareAudioRecorder() {
-        let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.m4a")
+        let audioFileURL = getDocumentsDirectory().appendingPathComponent(identifier)
         
         let settings: [String : Any] = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
@@ -50,20 +55,29 @@ class AddNoteViewController: UIViewController {
         ]
         
         do {
-            audioRecorder = try AVAudioRecorder(url: audioFilename, settings: settings)
+            
+            audioRecorder = try AVAudioRecorder(url: audioFileURL, settings: settings)
             audioRecorder.delegate = self
             //audioRecorder.isMeteringEnabled = true
             audioRecorder.prepareToRecord()
             loadRecordingUI()
+            checkIfNoteExists()
         } catch {
             // failed to prepare recorder!
             finishRecording(success: false)
         }
-
+        
     }
     
     func loadRecordingUI() {
         playbackButton.isEnabled = false
+    }
+    
+    func checkIfNoteExists() {
+        let realm = try! Realm()
+        if let existingNote = realm.object(ofType: Note.self, forPrimaryKey: identifier as AnyObject) {
+            note = existingNote
+        }
     }
     
     func loadPermissionErrorUI() {
@@ -106,20 +120,13 @@ class AddNoteViewController: UIViewController {
         }
     }
     
-    
-    func getDocumentsDirectory() -> URL {
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        let documentsDirectory = paths[0]
-        return documentsDirectory
-    }
-    
     func finishRecording(success: Bool) {
         audioRecorder.stop()
         
         if success {
-            recordButton.setTitle("Tap to Retry", for: .normal)
+            recordButton.setTitle("Retry", for: .normal)
         } else {
-            recordButton.setTitle("Tap to Record", for: .normal)
+            recordButton.setTitle("Hold Record", for: .normal)
             // recording failed :(
         }
         
@@ -129,7 +136,31 @@ class AddNoteViewController: UIViewController {
         } catch {
             print("can't disable shared recording session")
         }
-
+        
+        if let realm = note?.realm {
+            try! realm.write {
+                note!.timestamp = Date()
+            }
+        } else {
+            let realm = try! Realm()
+            try! realm.write {
+                note = Note()
+                note!.id = identifier
+                note!.timestamp = Date()
+                realm.add(note!)
+            }
+        }
+        
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == SegueIdentifiers.unwindToHome {
+            guard let _ = note else { return }
+            let realm = try! Realm()
+            try! realm.write {
+                realm.delete(note!)
+            }
+        }
     }
     
 }

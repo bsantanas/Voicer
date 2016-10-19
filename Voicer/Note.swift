@@ -10,9 +10,8 @@ import RealmSwift
 
 class Note: Object {
     //MARK: properties
-    dynamic var name = ""
     dynamic var id: String = ""
-    
+    dynamic var timestamp = Date()
     
     //MARK: meta
     override class func primaryKey() -> String? { return "id" }

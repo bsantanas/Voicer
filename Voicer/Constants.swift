@@ -10,9 +10,11 @@ import Foundation
 
 struct SegueIdentifiers {
     static let feedToAddNote = "feedToAddNote"
+    static let unwindToHome = "unwindToHome"
+    static let unwindToHomeAndSave = "unwindToHomeAndSave"
 }
-
 
 struct ReuseIdentifiers {
     static let noteCell = "noteCell"
 }
+

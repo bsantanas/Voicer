@@ -7,47 +7,66 @@
 //
 
 import UIKit
+import RealmSwift
+import AVFoundation
 
 class TableViewController: UITableViewController {
     
-    var notes = [Note]()
+    let notes: Results<Note> = {
+        let realm = try! Realm()
+        return realm.objects(Note.self).sorted(byProperty: "timestamp", ascending: false)
+    }()
+    var token: NotificationToken?
+    var audioPlayer: AVAudioPlayer!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        token = notes.addNotificationBlock {[weak self] (changes: RealmCollectionChange) in
+            guard let tableView = self?.tableView else { return }
+            
+            switch changes {
+            case .initial:
+                tableView.reloadData()
+                break
+            case .update(let results, let deletions, let insertions, let modifications):
+                tableView.beginUpdates()
+                
+                //re-order repos when new pushes happen
+                tableView.insertRows(at: insertions.map { IndexPath(row:$0,section:0 ) }, with: .automatic)
+                tableView.endUpdates()
+                break
+            case .error(let error):
+                print(error)
+                break
+            }
+        }
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
 
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
+        return notes.count
     }
 
-    /*
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
+        
+        let note = notes[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: ReuseIdentifiers.noteCell) as! NoteCell
+        cell.configureWith(note)
+        cell.tapAction = { (cell) in
+            self.playAudioFileFromNoteAt(index: (tableView.indexPath(for: cell)?.row)!)
+        }
 
         return cell
     }
-    */
+    
 
     /*
     // Override to support conditional editing of the table view.
@@ -94,11 +113,17 @@ class TableViewController: UITableViewController {
     }
     */
     
-    @IBAction func cancelToTableViewControllerWithSegue(_ segue:UIStoryboardSegue) {
-        
+    func playAudioFileFromNoteAt(index: Int) {
+        do {
+            let url = getDocumentsDirectory().appendingPathComponent(notes[index].id)
+            try audioPlayer = AVAudioPlayer(contentsOf: url)
+            audioPlayer.play()
+        } catch {
+            print("Couldn't open player")
+        }
     }
     
-    @IBAction func saveNewNote(segue:UIStoryboardSegue) {
+    @IBAction func unwindToHome(_ segue: UIStoryboardSegue) {
         
     }
 
