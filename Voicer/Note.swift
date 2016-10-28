@@ -12,7 +12,15 @@ class Note: Object {
     //MARK: properties
     dynamic var id: String = ""
     dynamic var timestamp = Date()
+    //dynamic var topics: [String] = []
     
     //MARK: meta
     override class func primaryKey() -> String? { return "id" }
+    
+    convenience init(_ id:String, timestamp:Date){
+        self.init()
+        self.id = id
+        self.timestamp = timestamp
+        //self.topics = topics
+    }
 }
