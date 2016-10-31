@@ -15,6 +15,7 @@ class FeedViewController: UIViewController {
     //MARK: Outlets
     @IBOutlet weak var tableView:UITableView!
     @IBOutlet weak var segmentedControl:UISegmentedControl!
+    @IBOutlet weak var recordButton:UIButton!
     
     //MARK: Variables
     let trendingNotes: Results<Note> = {
@@ -29,17 +30,29 @@ class FeedViewController: UIViewController {
     var sectionNames: [String] {
         return Set(trendingNotes.value(forKeyPath: "topic") as! [String]).sorted()
     }
-    var trendingNotesToken: NotificationToken?
-    var recommendedNotesToken: NotificationToken?
-    var filteredNotesToken: NotificationToken?
-    var audioPlayer: AVAudioPlayer!
+    fileprivate let recordNoteAnimationController = RecordNoteAnimationController()
+    fileprivate let swipeInteractionController = SwipeInteractionController()
+    private var trendingNotesToken: NotificationToken?
+    private var recommendedNotesToken: NotificationToken?
+    private var filteredNotesToken: NotificationToken?
+    private var audioPlayer: AVAudioPlayer!
     
     // MARK: View lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tableView.delegate = self
+        tableView.dataSource = self
+        
         registerNotificationsForRealmCollections()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == SegueIdentifiers.feedToAddNote {
+            segue.destination.transitioningDelegate = self
+            swipeInteractionController.wireTo(segue.destination)
+        }
     }
     
     // MARK: Instance methods
@@ -53,6 +66,10 @@ class FeedViewController: UIViewController {
         } catch {
             print("Couldn't open player")
         }
+    }
+    
+    @IBAction func segmentedControlDidChange(control: UISegmentedControl) {
+        tableView.reloadData()
     }
     
     func currentNotes() -> Results<Note> {
@@ -209,4 +226,16 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
      */
     
     // MARK: UITableViewDelegate
+}
+
+extension FeedViewController: UIViewControllerTransitioningDelegate {
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        recordNoteAnimationController.originFrame = recordButton.frame
+        return recordNoteAnimationController
+    }
+    
+    func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+        
+        return swipeInteractionController.interactionInProgress ? swipeInteractionController : nil
+    }
 }

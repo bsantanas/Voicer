@@ -8,7 +8,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Menu-->
         <scene sceneID="YZ5-am-dsK">
             <objects>
                 <viewController id="xVr-5z-zxp" sceneMemberID="viewController">
@@ -21,16 +21,18 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="fBZ-RO-9BY"/>
+                    <navigationItem key="navigationItem" title="Menu" id="zio-MY-qrA">
+                        <barButtonItem key="leftBarButtonItem" title="Back" id="wGP-98-aKX"/>
+                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4SQ-wG-PYw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3610" y="-603"/>
         </scene>
-        <!--View Controller-->
+        <!--Feed View Controller-->
         <scene sceneID="ydR-yE-sE6">
             <objects>
-                <viewController id="5HW-Ov-58m" sceneMemberID="viewController">
+                <viewController id="5HW-Ov-58m" customClass="FeedViewController" customModule="Voicer" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="NUK-Hk-C2o"/>
                         <viewControllerLayoutGuide type="bottom" id="3tP-KN-gHk"/>
@@ -45,14 +47,17 @@
                                 </constraints>
                                 <state key="normal" title="Button"/>
                                 <connections>
-                                    <segue destination="4fk-5o-rvU" kind="presentation" id="ntl-SY-H5a"/>
+                                    <segue destination="4fk-5o-rvU" kind="presentation" identifier="feedToAddNote" id="ntl-SY-H5a"/>
                                 </connections>
                             </button>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="8qq-el-GnR">
                                 <segments>
-                                    <segment title="Hot"/>
+                                    <segment title="Trending"/>
                                     <segment title="Recommended"/>
                                 </segments>
+                                <connections>
+                                    <action selector="segmentedControlDidChangeWithControl:" destination="5HW-Ov-58m" eventType="valueChanged" id="d74-fk-3KN"/>
+                                </connections>
                             </segmentedControl>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="UVa-iy-W5W">
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -61,7 +66,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="72"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Oo1-pd-cvP" id="fr1-h9-fKT">
-                                            <frame key="frameInset" width="375" height="71"/>
+                                            <frame key="frameInset" width="375" height="72"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ukS-P8-byA">
@@ -135,6 +140,11 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="recordButton" destination="nab-iR-hgG" id="uWo-r6-SWe"/>
+                        <outlet property="segmentedControl" destination="8qq-el-GnR" id="61a-XB-wcv"/>
+                        <outlet property="tableView" destination="UVa-iy-W5W" id="Ws0-Sk-WZ2"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9tR-mf-U0z" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -185,7 +195,7 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.75" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="WUc-CD-IrC" firstAttribute="centerY" secondItem="kjC-j8-eDS" secondAttribute="centerY" multiplier="0.7" id="625-Mx-yfJ"/>
                             <constraint firstItem="WUc-CD-IrC" firstAttribute="centerX" secondItem="kjC-j8-eDS" secondAttribute="centerX" id="W7L-h3-BL1"/>
@@ -196,13 +206,11 @@
                     <navigationItem key="navigationItem" title="New Note" id="VOj-6g-03M">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="em1-tG-u73">
                             <connections>
-                                <action selector="cancelButtonTapped:" destination="Jan-d9-nEw" id="Hkd-Im-99Z"/>
-                                <segue destination="OJJ-td-1pS" kind="unwind" unwindAction="unwindToHome:" id="PYf-xV-KTQ"/>
+                                <action selector="dismissButtonTapped" destination="Jan-d9-nEw" id="i0l-uS-3tB"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="09r-oB-bq1">
                             <connections>
-                                <action selector="doneButtonTapped:" destination="Jan-d9-nEw" id="UOA-fb-iB4"/>
                                 <segue destination="OJJ-td-1pS" kind="unwind" unwindAction="unwindToHome:" id="Gvu-2h-AmO"/>
                             </connections>
                         </barButtonItem>

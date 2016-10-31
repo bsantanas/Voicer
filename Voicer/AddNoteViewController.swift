@@ -44,6 +44,16 @@ class AddNoteViewController: UIViewController {
         }
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == SegueIdentifiers.unwindToHome {
+            guard let _ = note else { return }
+            let realm = try! Realm()
+            try! realm.write {
+                realm.delete(note!)
+            }
+        }
+    }
+    
     func prepareAudioRecorder() {
         let audioFileURL = getDocumentsDirectory().appendingPathComponent(identifier)
         
@@ -88,6 +98,8 @@ class AddNoteViewController: UIViewController {
         print("Unable to start recorder")
     }
     
+    //MARK: - IBActions
+    
     @IBAction func beginRecordingNote(_ sender: UIButton) {
         let recordingSession = AVAudioSession.sharedInstance()
         do {
@@ -118,6 +130,10 @@ class AddNoteViewController: UIViewController {
                 print("Couldn't open player")
             }
         }
+    }
+    
+    @IBAction func dismissButtonTapped() {
+        dismiss(animated: true, completion: nil)
     }
     
     func finishRecording(success: Bool) {
@@ -152,17 +168,7 @@ class AddNoteViewController: UIViewController {
         }
         
     }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == SegueIdentifiers.unwindToHome {
-            guard let _ = note else { return }
-            let realm = try! Realm()
-            try! realm.write {
-                realm.delete(note!)
-            }
-        }
-    }
-    
+
 }
 
 
