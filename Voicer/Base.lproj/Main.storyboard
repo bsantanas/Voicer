@@ -41,15 +41,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nab-iR-hgG">
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="P5p-XD-5Xq"/>
-                                </constraints>
-                                <state key="normal" title="Button"/>
-                                <connections>
-                                    <segue destination="4fk-5o-rvU" kind="presentation" identifier="feedToAddNote" id="ntl-SY-H5a"/>
-                                </connections>
-                            </button>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="8qq-el-GnR">
                                 <segments>
                                     <segment title="Trending"/>
@@ -66,7 +57,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="72"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Oo1-pd-cvP" id="fr1-h9-fKT">
-                                            <frame key="frameInset" width="375" height="72"/>
+                                            <frame key="frameInset" width="375" height="71"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ukS-P8-byA">
@@ -106,18 +97,46 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cMW-Ja-Tuc">
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Recording..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6kX-fn-VKq">
+                                        <fontDescription key="fontDescription" type="system" pointSize="38"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.3330078125" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="6kX-fn-VKq" firstAttribute="centerY" secondItem="cMW-Ja-Tuc" secondAttribute="centerY" id="4mQ-WB-LDS"/>
+                                    <constraint firstItem="6kX-fn-VKq" firstAttribute="centerX" secondItem="cMW-Ja-Tuc" secondAttribute="centerX" id="7jM-ua-Ivs"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nab-iR-hgG">
+                                <color key="backgroundColor" red="1" green="0.027805624138221741" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="P5p-XD-5Xq"/>
+                                    <constraint firstAttribute="width" constant="60" id="y9a-2u-ssc"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="29"/>
+                                <state key="normal" title="+">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="UVa-iy-W5W" firstAttribute="leading" secondItem="nab-iR-hgG" secondAttribute="leading" id="FTW-2A-qcb"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="nab-iR-hgG" secondAttribute="trailing" id="L8a-FI-Oe2"/>
+                            <constraint firstItem="cMW-Ja-Tuc" firstAttribute="leading" secondItem="hG9-lq-g4J" secondAttribute="leadingMargin" constant="-20" id="NJA-Kh-Ex8"/>
+                            <constraint firstItem="3tP-KN-gHk" firstAttribute="top" secondItem="nab-iR-hgG" secondAttribute="bottom" constant="20" id="PcS-85-EGd"/>
                             <constraint firstItem="8qq-el-GnR" firstAttribute="top" secondItem="NUK-Hk-C2o" secondAttribute="bottom" constant="8" symbolic="YES" id="Sgh-7N-hVS"/>
-                            <constraint firstItem="UVa-iy-W5W" firstAttribute="trailing" secondItem="nab-iR-hgG" secondAttribute="trailing" id="bb2-g1-Aeg"/>
+                            <constraint firstItem="3tP-KN-gHk" firstAttribute="top" secondItem="UVa-iy-W5W" secondAttribute="bottom" id="Uaz-yG-bYF"/>
                             <constraint firstItem="8qq-el-GnR" firstAttribute="centerX" secondItem="hG9-lq-g4J" secondAttribute="centerX" id="gXI-Vq-YYT"/>
-                            <constraint firstItem="nab-iR-hgG" firstAttribute="top" secondItem="UVa-iy-W5W" secondAttribute="bottom" id="kDO-tX-Sge"/>
                             <constraint firstAttribute="trailing" secondItem="UVa-iy-W5W" secondAttribute="trailing" id="mB9-aQ-kkO"/>
-                            <constraint firstItem="nab-iR-hgG" firstAttribute="bottom" secondItem="3tP-KN-gHk" secondAttribute="top" id="oVB-N5-API"/>
                             <constraint firstItem="UVa-iy-W5W" firstAttribute="leading" secondItem="hG9-lq-g4J" secondAttribute="leading" id="rCG-c0-wDp"/>
                             <constraint firstItem="UVa-iy-W5W" firstAttribute="top" secondItem="8qq-el-GnR" secondAttribute="bottom" constant="8" symbolic="YES" id="t47-85-f3Y"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="cMW-Ja-Tuc" secondAttribute="trailing" constant="-20" id="uGV-Xm-5ap"/>
+                            <constraint firstItem="3tP-KN-gHk" firstAttribute="top" secondItem="cMW-Ja-Tuc" secondAttribute="bottom" id="vls-hT-dv9"/>
+                            <constraint firstItem="cMW-Ja-Tuc" firstAttribute="top" secondItem="NUK-Hk-C2o" secondAttribute="bottom" id="vnc-B3-iC7"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="eWh-DN-WTQ">
@@ -141,9 +160,11 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="overlay" destination="cMW-Ja-Tuc" id="gB7-g2-ymF"/>
                         <outlet property="recordButton" destination="nab-iR-hgG" id="uWo-r6-SWe"/>
                         <outlet property="segmentedControl" destination="8qq-el-GnR" id="61a-XB-wcv"/>
                         <outlet property="tableView" destination="UVa-iy-W5W" id="Ws0-Sk-WZ2"/>
+                        <segue destination="4fk-5o-rvU" kind="presentation" identifier="feedToAddNote" id="7Fx-Fu-7YC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9tR-mf-U0z" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -186,42 +207,39 @@
                                     <action selector="playbackNote:" destination="Jan-d9-nEw" eventType="touchUpInside" id="11v-2x-xht"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WUc-CD-IrC">
-                                <state key="normal" title="Record"/>
-                                <connections>
-                                    <action selector="beginRecordingNote:" destination="Jan-d9-nEw" eventType="touchDown" id="sHu-dS-M5e"/>
-                                    <action selector="cancelRecordingNote:" destination="Jan-d9-nEw" eventType="touchUpOutside" id="BiF-3w-D0i"/>
-                                    <action selector="finishRecordingNote:" destination="Jan-d9-nEw" eventType="touchUpInside" id="iym-5a-teq"/>
-                                </connections>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wL3-BD-lzb">
+                                <color key="backgroundColor" red="1" green="0.027805624139999999" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="Hqr-ho-NxI"/>
+                                    <constraint firstAttribute="width" constant="60" id="va6-oD-jpO"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="29"/>
+                                <state key="normal" title="+">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="0.75" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="WUc-CD-IrC" firstAttribute="centerY" secondItem="kjC-j8-eDS" secondAttribute="centerY" multiplier="0.7" id="625-Mx-yfJ"/>
-                            <constraint firstItem="WUc-CD-IrC" firstAttribute="centerX" secondItem="kjC-j8-eDS" secondAttribute="centerX" id="W7L-h3-BL1"/>
                             <constraint firstItem="frb-rm-ehR" firstAttribute="centerY" secondItem="kjC-j8-eDS" secondAttribute="centerY" multiplier="1.7" id="cxU-3S-Bwc"/>
                             <constraint firstItem="frb-rm-ehR" firstAttribute="centerX" secondItem="kjC-j8-eDS" secondAttribute="centerX" id="syc-1t-sbQ"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="wL3-BD-lzb" secondAttribute="trailing" id="vQF-21-i8c"/>
+                            <constraint firstItem="m3H-0n-M9z" firstAttribute="top" secondItem="wL3-BD-lzb" secondAttribute="bottom" constant="20" id="zhj-RU-oi9"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="New Note" id="VOj-6g-03M">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="em1-tG-u73">
-                            <connections>
-                                <action selector="dismissButtonTapped" destination="Jan-d9-nEw" id="i0l-uS-3tB"/>
-                            </connections>
-                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="09r-oB-bq1">
                             <connections>
-                                <segue destination="OJJ-td-1pS" kind="unwind" unwindAction="unwindToHome:" id="Gvu-2h-AmO"/>
+                                <action selector="dismissButtonTapped" destination="Jan-d9-nEw" id="LfP-1A-fNK"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="playbackButton" destination="frb-rm-ehR" id="Anb-Nd-J0n"/>
-                        <outlet property="recordButton" destination="WUc-CD-IrC" id="xhX-h2-xJW"/>
+                        <outlet property="recordButton" destination="wL3-BD-lzb" id="xGC-mN-MOb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7Ae-I4-wgN" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="OJJ-td-1pS" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="3641" y="688"/>
         </scene>

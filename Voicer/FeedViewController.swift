@@ -16,6 +16,7 @@ class FeedViewController: UIViewController {
     @IBOutlet weak var tableView:UITableView!
     @IBOutlet weak var segmentedControl:UISegmentedControl!
     @IBOutlet weak var recordButton:UIButton!
+    @IBOutlet weak var overlay:UIView!
     
     //MARK: Variables
     let trendingNotes: Results<Note> = {
@@ -44,16 +45,31 @@ class FeedViewController: UIViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
+        overlay.isHidden = true
+        recordButton.addTarget(self, action: #selector(self.startRecording), for: .touchDown)
+        recordButton.addTarget(self, action: #selector(self.stopRecordingAndPresentController), for: .touchUpInside)
+        recordButton.addTarget(self, action: #selector(self.stopRecording), for: .touchDragExit)
         
         registerNotificationsForRealmCollections()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == SegueIdentifiers.feedToAddNote {
-            segue.destination.transitioningDelegate = self
-            swipeInteractionController.wireTo(segue.destination)
+//            segue.destination.transitioningDelegate = self
+//            swipeInteractionController.wireTo(segue.destination)
         }
     }
+    
+    override func viewDidLayoutSubviews() {
+        recordButton.layer.cornerRadius = recordButton.frame.width/2
+    }
+    
+    // MARK: User Actions
+    
+    @IBAction func segmentedControlDidChange(control: UISegmentedControl) {
+        tableView.reloadData()
+    }
+    
     
     // MARK: Instance methods
     
@@ -66,10 +82,6 @@ class FeedViewController: UIViewController {
         } catch {
             print("Couldn't open player")
         }
-    }
-    
-    @IBAction func segmentedControlDidChange(control: UISegmentedControl) {
-        tableView.reloadData()
     }
     
     func currentNotes() -> Results<Note> {
@@ -157,6 +169,28 @@ class FeedViewController: UIViewController {
         }
     }
     
+    func startRecording() {
+        self.overlay.isHidden = false
+        UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 5, options: [], animations: {
+                self.recordButton.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
+            self.overlay.alpha = 1
+            }, completion: nil)
+    }
+    
+    func stopRecordingAndPresentController() {
+        stopRecording()
+        performSegue(withIdentifier: SegueIdentifiers.feedToAddNote, sender: self)
+    }
+    
+    func stopRecording() {
+        UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 5, options: [], animations: {
+            self.recordButton.transform = CGAffineTransform.identity
+            self.overlay.alpha = 0
+            }, completion: { finished in
+                self.overlay.isHidden = true
+        })
+    }
+    
 }
 
 extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
@@ -228,14 +262,28 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
     // MARK: UITableViewDelegate
 }
 
-extension FeedViewController: UIViewControllerTransitioningDelegate {
-    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        recordNoteAnimationController.originFrame = recordButton.frame
-        return recordNoteAnimationController
-    }
-    
-    func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        
-        return swipeInteractionController.interactionInProgress ? swipeInteractionController : nil
-    }
-}
+// MARK: -
+//extension FeedViewController: UIViewControllerTransitioningDelegate {
+//    
+//    // Presenting
+//    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+//        
+//        recordNoteAnimationController.originFrame = recordButton.frame
+//        return recordNoteAnimationController
+//    }
+//    
+//    func interactionControllerForPresentation(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+//    
+//        return swipeInteractionController.interactionInProgress ? swipeInteractionController : nil
+//    }
+//    
+//    // Dismissing 
+//    
+//    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+//        return recordNoteAnimationController
+//    }
+//    
+//    func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+//        return swipeInteractionController.interactionInProgress ? swipeInteractionController : nil
+//    }
+//}

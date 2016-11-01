@@ -15,7 +15,7 @@ class RecordNoteAnimationController: NSObject, UIViewControllerAnimatedTransitio
     // MARK: UIViewControllerAnimatedTransitioning
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return 0.2
+        return 2
     }
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
@@ -31,26 +31,30 @@ class RecordNoteAnimationController: NSObject, UIViewControllerAnimatedTransitio
         let center = CGPoint(x:originFrame.midX,y:originFrame.midY)
         
 //        let circleMaskPathInitial = UIBezierPath(rect: originFrame)
-        let circleMaskPathInitial = UIBezierPath.rectPathWith(center: center, sideH: originFrame.width, sideV: originFrame.height)
+        let circleMaskPathInitial = UIBezierPath(roundedRect: originFrame, cornerRadius: originFrame.width/2).cgPath
         // If point is above center in y adjust extreme point
         let extremePoint = CGPoint(x: center.x, y: center.y /*- toVC.view.bounds.height*/)
         let radius = sqrt((extremePoint.x*extremePoint.x) + (extremePoint.y*extremePoint.y))
         //let circleMaskPathFinal = UIBezierPath(ovalIn: originFrame.insetBy(dx: -radius, dy: -radius))
-        let circleMaskPathFinal = UIBezierPath.circlePathWith(center: center, radius: radius)
+//        let circleMaskPathFinal = UIBezierPath.circlePathWith(center: center, radius: radius)
+        let circleMaskPathFinal = UIBezierPath(roundedRect: toVC.view.bounds, cornerRadius: 20).cgPath
+        
         
         let maskLayer = CAShapeLayer()
-        maskLayer.path = circleMaskPathFinal.cgPath
+        maskLayer.path = circleMaskPathFinal
         toVC.view.layer.mask = maskLayer
         
         CATransaction.begin()
+        
         let maskLayerAnimation = CABasicAnimation(keyPath: "path")
-        maskLayerAnimation.fromValue = circleMaskPathInitial.cgPath
-        maskLayerAnimation.toValue = circleMaskPathFinal.cgPath
         maskLayerAnimation.duration = self.transitionDuration(using: transitionContext)
         CATransaction.setCompletionBlock({
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
             toVC.view.layer.mask = nil
         })
+        maskLayerAnimation.fromValue = circleMaskPathInitial
+        maskLayerAnimation.toValue = circleMaskPathFinal
+        maskLayerAnimation.duration = self.transitionDuration(using: transitionContext)
         maskLayer.add(maskLayerAnimation, forKey: "path")
         CATransaction.commit()
     }
@@ -58,12 +62,14 @@ class RecordNoteAnimationController: NSObject, UIViewControllerAnimatedTransitio
 }
 
 extension UIBezierPath {
-    class func circlePathWith(center: CGPoint, radius: CGFloat) -> UIBezierPath {
+    class func circlePathWith(center: CGPoint, radius: CGFloat, steps:Int) -> UIBezierPath {
         let circlePath = UIBezierPath()
-        circlePath.addArc(withCenter: center, radius: radius, startAngle: -CGFloat(M_PI), endAngle: -CGFloat(M_PI/2), clockwise: true)
-        circlePath.addArc(withCenter: center, radius: radius, startAngle: -CGFloat(M_PI/2), endAngle: 0, clockwise: true)
-        circlePath.addArc(withCenter: center, radius: radius, startAngle: 0, endAngle: CGFloat(M_PI/2), clockwise: true)
-        circlePath.addArc(withCenter: center, radius: radius, startAngle: CGFloat(M_PI/2), endAngle: CGFloat(M_PI), clockwise: true)
+        let delta = CGFloat((2*M_PI)/Double(steps))
+        for i in 0..<steps {
+            let alpha = CGFloat(i)*delta
+            let beta = CGFloat(i+1)*delta
+            circlePath.addArc(withCenter: center, radius: radius, startAngle: alpha, endAngle: -beta, clockwise: true)
+        }
         circlePath.close()
         return circlePath
     }

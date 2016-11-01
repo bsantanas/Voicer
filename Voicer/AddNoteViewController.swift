@@ -18,6 +18,7 @@ class AddNoteViewController: UIViewController {
     var audioRecorder: AVAudioRecorder!
     var audioPlayer: AVAudioPlayer!
     var note: Note?
+    var levelTimer: Timer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,6 +43,15 @@ class AddNoteViewController: UIViewController {
         } catch {
             // failed to get permissions!
         }
+        
+        
+        recordButton.addTarget(self, action: #selector(self.startRecording), for: .touchDown)
+        recordButton.addTarget(self, action: #selector(self.stopRecording), for: .touchUpInside)
+        recordButton.addTarget(self, action: #selector(self.cancelRecording), for: .touchDragExit)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        recordButton.layer.cornerRadius = recordButton.frame.width/2
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -98,27 +108,42 @@ class AddNoteViewController: UIViewController {
         print("Unable to start recorder")
     }
     
-    //MARK: - IBActions
+    //MARK: - User Actions
     
-    @IBAction func beginRecordingNote(_ sender: UIButton) {
+    func startRecording() {
         let recordingSession = AVAudioSession.sharedInstance()
         do {
             try recordingSession.setActive(true)
-            recordButton.setTitle("Recording", for: .normal)
             audioRecorder.record()
+            levelTimer = Timer.scheduledTimer(timeInterval: 0.03, target: self, selector: #selector(self.levelTimerCallback), userInfo: nil, repeats: true)
+
+            UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 5, options: [], animations: {
+                self.recordButton.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
+                }, completion: nil)
         } catch {
             finishRecording(success: false)
             loadRecorderErrorUI()
         }
+        
     }
     
-    @IBAction func finishRecordingNote(_ sender: UIButton) {
+    func stopRecording() {
+        UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 5, options: [], animations: {
+            self.recordButton.transform = CGAffineTransform.identity
+            }, completion: { finished in
+        })
         finishRecording(success: true)
     }
     
-    @IBAction func cancelRecordingNote(_ sender: UIButton) {
+    func cancelRecording() {
+        UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 5, options: [], animations: {
+            self.recordButton.transform = CGAffineTransform.identity
+            }, completion: { finished in
+        })
         finishRecording(success: false)
+        
     }
+    
     
     @IBAction func playbackNote(_ sender: UIButton) {
         if (!audioRecorder.isRecording){
@@ -138,11 +163,12 @@ class AddNoteViewController: UIViewController {
     
     func finishRecording(success: Bool) {
         audioRecorder.stop()
-        
+        levelTimer?.invalidate()
+        levelTimer = nil
+
         if success {
-            recordButton.setTitle("Retry", for: .normal)
+            //
         } else {
-            recordButton.setTitle("Hold Record", for: .normal)
             // recording failed :(
         }
         
@@ -167,6 +193,11 @@ class AddNoteViewController: UIViewController {
             }
         }
         
+    }
+
+    func levelTimerCallback() {
+        audioRecorder.updateMeters()
+        print(audioRecorder.averagePower(forChannel: 0))
     }
 
 }
