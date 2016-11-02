@@ -10,13 +10,61 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Voicer/VoiceGraphView.swift"
-            timestampString = "499804538.690039"
+            timestampString = "499810741.765716"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "54"
-            endingLineNumber = "54"
+            startingLineNumber = "70"
+            endingLineNumber = "70"
             landmarkName = "setPathWith(levels:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Voicer/VoiceGraphView.swift"
+            timestampString = "499810741.765716"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "108"
+            endingLineNumber = "108"
+            landmarkName = "setPathWith2(levels:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Voicer.VoiceGraphView.setPathWith2 (levels : Swift.Array&lt;CoreGraphics.CGFloat&gt;) -&gt; ()"
+                  moduleName = "Voicer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bernardosantana/Documents/Workspace/Voicer/Voicer/VoiceGraphView.swift"
+                  timestampString = "499808792.744123"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "93"
+                  endingLineNumber = "93"
+                  offsetFromSymbolStart = "1818">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Voicer.VoiceGraphView.(setPathWith2 (levels : Swift.Array&lt;CoreGraphics.CGFloat&gt;) -&gt; ()).(closure #2)"
+                  moduleName = "Voicer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bernardosantana/Documents/Workspace/Voicer/Voicer/VoiceGraphView.swift"
+                  timestampString = "499808792.747738"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "93"
+                  endingLineNumber = "93"
+                  offsetFromSymbolStart = "20">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

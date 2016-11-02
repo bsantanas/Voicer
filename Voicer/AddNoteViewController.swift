@@ -166,7 +166,7 @@ class AddNoteViewController: UIViewController {
         audioRecorder.updateMeters()
         if let _ = levels {
             levels!.append(CGFloat(audioRecorder.averagePower(forChannel: 0)))
-            graphView.setPathWith(levels: levels!)
+            graphView.setPathWith2(levels: levels!)
         }
     }
     
@@ -183,7 +183,7 @@ class AddNoteViewController: UIViewController {
         do {
             try recordingSession.setActive(true)
             audioRecorder.record()
-            levelTimer = Timer.scheduledTimer(timeInterval: 0.03, target: self, selector: #selector(self.levelTimerCallback), userInfo: nil, repeats: true)
+            levelTimer = Timer.scheduledTimer(timeInterval: 0.02, target: self, selector: #selector(self.levelTimerCallback), userInfo: nil, repeats: true)
             levels = []
             finishTimer = Timer.scheduledTimer(timeInterval: 30, target: self, selector: #selector(self.finishTimerCallback), userInfo: nil, repeats: false)
             UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 5, options: [], animations: {
