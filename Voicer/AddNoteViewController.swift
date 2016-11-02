@@ -15,12 +15,14 @@ class AddNoteViewController: UIViewController {
     @IBOutlet weak var recordButton: UIButton!
     @IBOutlet weak var playbackButton: UIButton!
     @IBOutlet weak var graphView: VoiceGraphView!
+    @IBOutlet weak var audioSlider: UISlider!
     var identifier: String!
     private var audioRecorder: AVAudioRecorder!
     private var audioPlayer: AVAudioPlayer!
     private var note: Note?
     private var levelTimer: Timer?
     private var finishTimer: Timer?
+    private var sliderTimer: Timer?
     
     var levels:[CGFloat]?
     
@@ -60,7 +62,7 @@ class AddNoteViewController: UIViewController {
             // failed to get permissions!
         }
         
-        
+        audioSlider.value = 0
         recordButton.addTarget(self, action: #selector(self.startRecording), for: .touchDown)
         recordButton.addTarget(self, action: #selector(self.stopRecording), for: .touchUpInside)
         recordButton.addTarget(self, action: #selector(self.cancelRecording), for: .touchDragExit)
@@ -174,6 +176,15 @@ class AddNoteViewController: UIViewController {
         finishTimer = nil
         stopRecording()
     }
+    
+    func updateSlider() {
+        if audioPlayer.isPlaying {
+           audioSlider.value = Float(audioPlayer.currentTime)
+        } else {
+            sliderTimer?.invalidate()
+            sliderTimer = nil
+        }
+    }
 
     
     //MARK: - User Actions
@@ -221,15 +232,25 @@ class AddNoteViewController: UIViewController {
             do {
                 try audioPlayer = AVAudioPlayer(contentsOf: audioRecorder.url)
                 audioPlayer.delegate = self
-                audioPlayer.play()
             } catch {
                 print("Couldn't open player")
             }
+            guard let _ = audioPlayer else { return }
+            audioPlayer.prepareToPlay()
+            audioSlider.maximumValue = Float(audioPlayer.duration)
+            audioSlider.value = 0.0
+            sliderTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.updateSlider), userInfo: nil, repeats: true)
+            audioPlayer.play()
         }
     }
     
     @IBAction private func dismissButtonTapped() {
         dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func slide(_ slider: UISlider) {
+        guard let _ = audioPlayer else { return }
+        audioPlayer.currentTime = TimeInterval(slider.value)
     }
 
 }

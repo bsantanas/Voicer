@@ -226,12 +226,21 @@
                                     <constraint firstAttribute="height" constant="156" id="Kvb-ji-s8H"/>
                                 </constraints>
                             </view>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="B79-BP-x1N">
+                                <color key="tintColor" red="0.49019607843137253" green="0.019607843137254902" blue="0.59215686274509804" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="slide:" destination="Jan-d9-nEw" eventType="valueChanged" id="xeU-Vz-cks"/>
+                                </connections>
+                            </slider>
                         </subviews>
-                        <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.67450980392156867" green="0.4823529411764706" blue="0.66666666666666663" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="B79-BP-x1N" secondAttribute="trailing" id="171-rz-1DR"/>
                             <constraint firstItem="FmL-Nx-Sxx" firstAttribute="top" secondItem="Mbx-oT-Ug1" secondAttribute="bottom" constant="8" symbolic="YES" id="AYY-qI-AFi"/>
                             <constraint firstAttribute="trailingMargin" secondItem="FmL-Nx-Sxx" secondAttribute="trailing" id="VAk-jh-BJj"/>
                             <constraint firstItem="frb-rm-ehR" firstAttribute="centerY" secondItem="kjC-j8-eDS" secondAttribute="centerY" multiplier="1.7" id="cxU-3S-Bwc"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="B79-BP-x1N" secondAttribute="leading" id="maJ-T2-mh4"/>
+                            <constraint firstItem="B79-BP-x1N" firstAttribute="top" secondItem="FmL-Nx-Sxx" secondAttribute="bottom" constant="8" id="nEy-8s-9Oz"/>
                             <constraint firstAttribute="leadingMargin" secondItem="FmL-Nx-Sxx" secondAttribute="leading" id="qgj-3f-udJ"/>
                             <constraint firstItem="frb-rm-ehR" firstAttribute="centerX" secondItem="kjC-j8-eDS" secondAttribute="centerX" id="syc-1t-sbQ"/>
                             <constraint firstAttribute="trailingMargin" secondItem="wL3-BD-lzb" secondAttribute="trailing" id="vQF-21-i8c"/>
@@ -246,6 +255,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="audioSlider" destination="B79-BP-x1N" id="4aB-sv-ipY"/>
                         <outlet property="graphView" destination="FmL-Nx-Sxx" id="WQ9-mK-BBr"/>
                         <outlet property="playbackButton" destination="frb-rm-ehR" id="Anb-Nd-J0n"/>
                         <outlet property="recordButton" destination="wL3-BD-lzb" id="xGC-mN-MOb"/>
