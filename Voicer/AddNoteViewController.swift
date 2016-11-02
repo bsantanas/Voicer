@@ -14,11 +14,27 @@ class AddNoteViewController: UIViewController {
     
     @IBOutlet weak var recordButton: UIButton!
     @IBOutlet weak var playbackButton: UIButton!
+    @IBOutlet weak var graphView: VoiceGraphView!
     var identifier: String!
-    var audioRecorder: AVAudioRecorder!
-    var audioPlayer: AVAudioPlayer!
-    var note: Note?
-    var levelTimer: Timer?
+    private var audioRecorder: AVAudioRecorder!
+    private var audioPlayer: AVAudioPlayer!
+    private var note: Note?
+    private var levelTimer: Timer?
+    private var finishTimer: Timer?
+    
+    var levels:[CGFloat]?
+    
+    // MARK: Lifecycle
+    
+    deinit {
+        levelTimer?.invalidate()
+        finishTimer?.invalidate()
+        levelTimer = nil
+        finishTimer = nil
+    }
+    
+    
+    // MARK: View Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,7 +80,9 @@ class AddNoteViewController: UIViewController {
         }
     }
     
-    func prepareAudioRecorder() {
+    // MARK: Helper methods
+    
+    private func prepareAudioRecorder() {
         let audioFileURL = getDocumentsDirectory().appendingPathComponent(identifier)
         
         let settings: [String : Any] = [
@@ -78,8 +96,8 @@ class AddNoteViewController: UIViewController {
             
             audioRecorder = try AVAudioRecorder(url: audioFileURL, settings: settings)
             audioRecorder.delegate = self
-            //audioRecorder.isMeteringEnabled = true
             audioRecorder.prepareToRecord()
+            audioRecorder.isMeteringEnabled = true
             loadRecordingUI()
             checkIfNoteExists()
         } catch {
@@ -89,83 +107,32 @@ class AddNoteViewController: UIViewController {
         
     }
     
-    func loadRecordingUI() {
+    private func loadRecordingUI() {
         playbackButton.isEnabled = false
     }
     
-    func checkIfNoteExists() {
+    private func checkIfNoteExists() {
         let realm = try! Realm()
         if let existingNote = realm.object(ofType: Note.self, forPrimaryKey: identifier as AnyObject) {
             note = existingNote
         }
     }
     
-    func loadPermissionErrorUI() {
+    private func loadPermissionErrorUI() {
         print("Please enable audio permissions")
     }
     
-    func loadRecorderErrorUI() {
+    private func loadRecorderErrorUI() {
         print("Unable to start recorder")
     }
     
-    //MARK: - User Actions
-    
-    func startRecording() {
-        let recordingSession = AVAudioSession.sharedInstance()
-        do {
-            try recordingSession.setActive(true)
-            audioRecorder.record()
-            levelTimer = Timer.scheduledTimer(timeInterval: 0.03, target: self, selector: #selector(self.levelTimerCallback), userInfo: nil, repeats: true)
-
-            UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 5, options: [], animations: {
-                self.recordButton.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
-                }, completion: nil)
-        } catch {
-            finishRecording(success: false)
-            loadRecorderErrorUI()
-        }
-        
-    }
-    
-    func stopRecording() {
-        UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 5, options: [], animations: {
-            self.recordButton.transform = CGAffineTransform.identity
-            }, completion: { finished in
-        })
-        finishRecording(success: true)
-    }
-    
-    func cancelRecording() {
-        UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 5, options: [], animations: {
-            self.recordButton.transform = CGAffineTransform.identity
-            }, completion: { finished in
-        })
-        finishRecording(success: false)
-        
-    }
-    
-    
-    @IBAction func playbackNote(_ sender: UIButton) {
-        if (!audioRecorder.isRecording){
-            do {
-                try audioPlayer = AVAudioPlayer(contentsOf: audioRecorder.url)
-                audioPlayer.delegate = self
-                audioPlayer.play()
-            } catch {
-                print("Couldn't open player")
-            }
-        }
-    }
-    
-    @IBAction func dismissButtonTapped() {
-        dismiss(animated: true, completion: nil)
-    }
-    
-    func finishRecording(success: Bool) {
+    private func finishRecording(success: Bool) {
         audioRecorder.stop()
         levelTimer?.invalidate()
         levelTimer = nil
-
+        finishTimer?.invalidate()
+        finishTimer = nil
+        
         if success {
             //
         } else {
@@ -194,10 +161,75 @@ class AddNoteViewController: UIViewController {
         }
         
     }
-
+    
     func levelTimerCallback() {
         audioRecorder.updateMeters()
-        print(audioRecorder.averagePower(forChannel: 0))
+        if let _ = levels {
+            levels!.append(CGFloat(audioRecorder.averagePower(forChannel: 0)))
+            graphView.setPathWith(levels: levels!)
+        }
+    }
+    
+    func finishTimerCallback() {
+        finishTimer = nil
+        stopRecording()
+    }
+
+    
+    //MARK: - User Actions
+    
+    func startRecording() {
+        let recordingSession = AVAudioSession.sharedInstance()
+        do {
+            try recordingSession.setActive(true)
+            audioRecorder.record()
+            levelTimer = Timer.scheduledTimer(timeInterval: 0.03, target: self, selector: #selector(self.levelTimerCallback), userInfo: nil, repeats: true)
+            levels = []
+            finishTimer = Timer.scheduledTimer(timeInterval: 30, target: self, selector: #selector(self.finishTimerCallback), userInfo: nil, repeats: false)
+            UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 5, options: [], animations: {
+                self.recordButton.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
+                }, completion: nil)
+        } catch {
+            finishRecording(success: false)
+            loadRecorderErrorUI()
+        }
+        
+    }
+    
+    func stopRecording() {
+        guard audioRecorder.isRecording else { return }
+        
+        UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 5, options: [], animations: {
+            self.recordButton.transform = CGAffineTransform.identity
+            }, completion: { finished in
+        })
+        finishRecording(success: true)
+    }
+    
+    func cancelRecording() {
+        UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 5, options: [], animations: {
+            self.recordButton.transform = CGAffineTransform.identity
+            }, completion: { finished in
+        })
+        finishRecording(success: false)
+        
+    }
+    
+    
+    @IBAction private func playbackNote(_ sender: UIButton) {
+        if (!audioRecorder.isRecording){
+            do {
+                try audioPlayer = AVAudioPlayer(contentsOf: audioRecorder.url)
+                audioPlayer.delegate = self
+                audioPlayer.play()
+            } catch {
+                print("Couldn't open player")
+            }
+        }
+    }
+    
+    @IBAction private func dismissButtonTapped() {
+        dismiss(animated: true, completion: nil)
     }
 
 }

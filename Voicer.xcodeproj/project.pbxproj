@@ -18,9 +18,10 @@
 		64371E971DB6AFFD006AB2C5 /* AddNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64371E961DB6AFFD006AB2C5 /* AddNoteViewController.swift */; };
 		64371E991DB7ACF3006AB2C5 /* NoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64371E981DB7ACF3006AB2C5 /* NoteCell.swift */; };
 		64371E9B1DB7C23D006AB2C5 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64371E9A1DB7C23D006AB2C5 /* Utilities.swift */; };
-		647321B41DC150940006A40E /* CreateNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 647321B31DC150940006A40E /* CreateNoteViewController.swift */; };
+		64D115CD1DCA439800808F10 /* UIBezierPath+Hermite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D115CC1DCA439800808F10 /* UIBezierPath+Hermite.swift */; };
 		64E0A7291DC7D2FF00855F14 /* RecordNoteAnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64E0A7281DC7D2FF00855F14 /* RecordNoteAnimationController.swift */; };
 		64E0A72B1DC7E73500855F14 /* SwipeInteractionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64E0A72A1DC7E73500855F14 /* SwipeInteractionController.swift */; };
+		64E0A72D1DCA394500855F14 /* VoiceGraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64E0A72C1DCA394500855F14 /* VoiceGraphView.swift */; };
 		AAAD1459451B057B733B813D /* Pods_Voicer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32B8698CF23928654BCD86BC /* Pods_Voicer.framework */; };
 		D4D2D3320623EE4DE7EEC2CB /* Pods_VoicerUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 234C0353C0E1C0511267774A /* Pods_VoicerUITests.framework */; };
 /* End PBXBuildFile section */
@@ -53,10 +54,11 @@
 		64371E961DB6AFFD006AB2C5 /* AddNoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNoteViewController.swift; sourceTree = "<group>"; };
 		64371E981DB7ACF3006AB2C5 /* NoteCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteCell.swift; sourceTree = "<group>"; };
 		64371E9A1DB7C23D006AB2C5 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
-		647321B31DC150940006A40E /* CreateNoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateNoteViewController.swift; sourceTree = "<group>"; };
 		64CD20A1DFAEA00C9BB28070 /* Pods-VoicerUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VoicerUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-VoicerUITests/Pods-VoicerUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		64D115CC1DCA439800808F10 /* UIBezierPath+Hermite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIBezierPath+Hermite.swift"; sourceTree = "<group>"; };
 		64E0A7281DC7D2FF00855F14 /* RecordNoteAnimationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordNoteAnimationController.swift; sourceTree = "<group>"; };
 		64E0A72A1DC7E73500855F14 /* SwipeInteractionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeInteractionController.swift; sourceTree = "<group>"; };
+		64E0A72C1DCA394500855F14 /* VoiceGraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoiceGraphView.swift; sourceTree = "<group>"; };
 		6AD7ED7AAB0424F52ED188D7 /* Pods-Voicer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Voicer.release.xcconfig"; path = "Pods/Target Support Files/Pods-Voicer/Pods-Voicer.release.xcconfig"; sourceTree = "<group>"; };
 		9EB6831293C897C1C2D169B2 /* Pods-VoicerUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VoicerUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-VoicerUITests/Pods-VoicerUITests.release.xcconfig"; sourceTree = "<group>"; };
 		A4D16E63619F0632C6A0904B /* Pods-Voicer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Voicer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Voicer/Pods-Voicer.debug.xcconfig"; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 				64371E7B1DB6A1C5006AB2C5 /* Info.plist */,
 				64E0A7281DC7D2FF00855F14 /* RecordNoteAnimationController.swift */,
 				64E0A72A1DC7E73500855F14 /* SwipeInteractionController.swift */,
+				64D115CC1DCA439800808F10 /* UIBezierPath+Hermite.swift */,
 			);
 			name = Supporting;
 			sourceTree = "<group>";
@@ -142,6 +145,7 @@
 				64371E731DB6A1C5006AB2C5 /* Main.storyboard */,
 				64371E761DB6A1C5006AB2C5 /* Assets.xcassets */,
 				64371E781DB6A1C5006AB2C5 /* LaunchScreen.storyboard */,
+				64E0A72C1DCA394500855F14 /* VoiceGraphView.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -159,7 +163,6 @@
 			children = (
 				64371E911DB6A66F006AB2C5 /* FeedViewController.swift */,
 				64371E961DB6AFFD006AB2C5 /* AddNoteViewController.swift */,
-				647321B31DC150940006A40E /* CreateNoteViewController.swift */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -382,9 +385,10 @@
 			files = (
 				64371E701DB6A1C4006AB2C5 /* AppDelegate.swift in Sources */,
 				64371E921DB6A66F006AB2C5 /* FeedViewController.swift in Sources */,
-				647321B41DC150940006A40E /* CreateNoteViewController.swift in Sources */,
+				64E0A72D1DCA394500855F14 /* VoiceGraphView.swift in Sources */,
 				64E0A7291DC7D2FF00855F14 /* RecordNoteAnimationController.swift in Sources */,
 				64371E9B1DB7C23D006AB2C5 /* Utilities.swift in Sources */,
+				64D115CD1DCA439800808F10 /* UIBezierPath+Hermite.swift in Sources */,
 				64371E901DB6A29E006AB2C5 /* Constants.swift in Sources */,
 				64E0A72B1DC7E73500855F14 /* SwipeInteractionController.swift in Sources */,
 				64371E991DB7ACF3006AB2C5 /* NoteCell.swift in Sources */,
