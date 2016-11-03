@@ -168,7 +168,7 @@ class AddNoteViewController: UIViewController {
         audioRecorder.updateMeters()
         if let _ = levels {
             levels!.append(CGFloat(audioRecorder.averagePower(forChannel: 0)))
-            graphView.setPathWith2(levels: levels!)
+            graphView.setBarsPathWith(levels: levels!)
         }
     }
     

@@ -189,7 +189,7 @@
             </objects>
             <point key="canvasLocation" x="2849" y="42"/>
         </scene>
-        <!--New Note-->
+        <!--Add Note View Controller-->
         <scene sceneID="jch-JJ-jaH">
             <objects>
                 <viewController id="Jan-d9-nEw" customClass="AddNoteViewController" customModule="Voicer" customModuleProvider="target" sceneMemberID="viewController">
@@ -233,7 +233,7 @@
                                 </connections>
                             </slider>
                         </subviews>
-                        <color key="backgroundColor" red="0.67450980392156867" green="0.4823529411764706" blue="0.66666666666666663" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="B79-BP-x1N" secondAttribute="trailing" id="171-rz-1DR"/>
                             <constraint firstItem="FmL-Nx-Sxx" firstAttribute="top" secondItem="Mbx-oT-Ug1" secondAttribute="bottom" constant="8" symbolic="YES" id="AYY-qI-AFi"/>
@@ -247,10 +247,26 @@
                             <constraint firstItem="m3H-0n-M9z" firstAttribute="top" secondItem="wL3-BD-lzb" secondAttribute="bottom" constant="20" id="zhj-RU-oi9"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="New Note" id="VOj-6g-03M">
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="09r-oB-bq1">
+                    <navigationItem key="navigationItem" id="8q7-rb-LHi">
+                        <nil key="title"/>
+                        <view key="titleView" contentMode="scaleToFill" id="KTI-9R-ami">
+                            <rect key="frame" x="113" y="6" width="150" height="33"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CgW-hn-69q">
+                                    <frame key="frameInset" minX="31" minY="6" width="88" height="21"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="27"/>
+                                    <color key="textColor" red="0.79676569183107393" green="0.75683210046243932" blue="0.96400934900475344" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        </view>
+                        <barButtonItem key="rightBarButtonItem" title="Done" id="tSu-cp-9BJ">
                             <connections>
-                                <action selector="dismissButtonTapped" destination="Jan-d9-nEw" id="LfP-1A-fNK"/>
+                                <action selector="dismissButtonTapped" destination="Jan-d9-nEw" id="12C-Un-667"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -270,9 +286,13 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="4fk-5o-rvU" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="6ry-i7-7pk">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="6ry-i7-7pk">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.29411764705882354" green="0.23137254901960785" blue="0.57647058823529407" alpha="1" colorSpace="calibratedRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" red="0.20392156862745098" green="0.14509803921568626" blue="0.47450980392156861" alpha="1" colorSpace="calibratedRGB"/>
+                        </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>

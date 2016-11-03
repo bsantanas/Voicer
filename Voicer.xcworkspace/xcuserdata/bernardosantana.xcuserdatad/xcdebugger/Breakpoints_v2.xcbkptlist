@@ -31,7 +31,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "108"
             endingLineNumber = "108"
-            landmarkName = "setPathWith2(levels:)"
+            landmarkName = "setSinePathWith(levels:)"
             landmarkType = "7">
             <Locations>
                <Location

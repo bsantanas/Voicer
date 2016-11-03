@@ -77,7 +77,7 @@ class VoiceGraphView: UIView {
         setNeedsDisplay()
     }
     
-    func setPathWith2(levels:[CGFloat]) {
+    func setSinePathWith(levels:[CGFloat]) {
         var y = levels
         let min = y.min()
         let max = y.max()
@@ -110,14 +110,60 @@ class VoiceGraphView: UIView {
         let signal = Array(zip(carrier,y).map({ return ($0 * $1 * amplitude) + bounds.height/2 }))
         
         // Get time series (X values)
-        //        let x = stride(from: 0, to: bounds.width, by: bounds.width/CGFloat(y.count))
         let x = stride(from: 0, to: bounds.width, by: bounds.width/CGFloat(MAX_SAMPLES))
         
         let points = Array(zip(signal, x)).map({ return CGPoint(x:$1,y:$0) })
-        //print(points.count)
         
         path = UIBezierPath(interpolating: points)
         setNeedsDisplay()
     }
+    
+    func setBarsPathWith(levels:[CGFloat]) {
+        var y = levels
+        let min = y.min()
+        let max = y.max()
+        guard max! - min! > 0 && y.count > 0 else { return }
+        
+        let drawingHeight = (bounds.height/2) * 0.9  // 90% of the drawable height
+        
+        // Normalizing Y
+        y = y.map({ ($0 - min!) / (max! - min!) })
+        
+        if y.count < MAX_SAMPLES*2 {
+            for _ in y.count...MAX_SAMPLES*2 {
+                y.append(0)
+            }
+        } else {
+            var aux = [CGFloat]()
+            let step = CGFloat(y.count)/CGFloat(MAX_SAMPLES*2)
+            for i in 0..<MAX_SAMPLES*2-1 {
+                let start = Int(CGFloat(i)*step)
+                let end = Int(CGFloat(i+1)*step)
+                let mean = y[start..<end].reduce(0, { result,value in
+                    return result + value }) / CGFloat(end - start)
+                aux.append(mean)
+            }
+            y = aux
+        }
+        
+        
+        let carrier = (1..<MAX_SAMPLES*2).map({ pow(-1,CGFloat($0)) })
+        let amplitude = drawingHeight
+        let signal = zip(carrier,y).map({ return ($0 * $1 * amplitude) + bounds.height/2 })
+        
+        // Get time series (X values)
+        var x = Array(stride(from: 0, to: bounds.width, by: bounds.width/CGFloat(MAX_SAMPLES)))
+        x = zip(x,x).flatMap({ [$0.0,$0.1] })
+        let points = Array(zip(signal, x)).map({ return CGPoint(x:$1,y:$0) })
+        
+        let path = UIBezierPath()
+        stride(from: 0, to: 2*MAX_SAMPLES-2, by: 2).forEach({
+            path.move(to: points[$0])
+            path.addLine(to: points[$0+1])
+        })
+        self.path = path
+        setNeedsDisplay()
+    }
+    
 
 }
