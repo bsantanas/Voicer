@@ -10,14 +10,22 @@ import UIKit
 
 class VoiceGraphView: UIView {
     
-    private var path:UIBezierPath?
+    private var paths = [UIBezierPath]()
     private let MAX_SAMPLES = 80
+    private var percentage:Float = 0
 
 
     override func draw(_ rect: CGRect) {
+        
+        guard paths.count > 0 else { return }
+        
         let context = UIGraphicsGetCurrentContext()
-        context?.setStrokeColor(UIColor(red: 125/255, green: 5/255, blue: 151/255, alpha: 1).cgColor)
-        path?.stroke()
+        let count = Float(paths.count)
+        paths.enumerated().forEach({
+            let color = Float($0.0)/count < percentage ? UIColor(red: 19/255, green: 131/255, blue: 152/255, alpha: 1).cgColor : UIColor(red: 170/255, green: 170/255, blue: 170/255, alpha: 1).cgColor
+            context?.setStrokeColor(color)
+            $0.1.stroke()
+        })
     }
  
     func setPathWith(levels:[CGFloat]) {
@@ -73,7 +81,7 @@ class VoiceGraphView: UIView {
         let points = Array(zip(y, x)).map({ return CGPoint(x:$1,y:$0) })
         //print(points.count)
         
-        path = UIBezierPath(interpolating: points)
+//        path = UIBezierPath(interpolating: points)
         setNeedsDisplay()
     }
     
@@ -114,7 +122,7 @@ class VoiceGraphView: UIView {
         
         let points = Array(zip(signal, x)).map({ return CGPoint(x:$1,y:$0) })
         
-        path = UIBezierPath(interpolating: points)
+//        path = UIBezierPath(interpolating: points)
         setNeedsDisplay()
     }
     
@@ -156,12 +164,18 @@ class VoiceGraphView: UIView {
         x = zip(x,x).flatMap({ [$0.0,$0.1] })
         let points = Array(zip(signal, x)).map({ return CGPoint(x:$1,y:$0) })
         
-        let path = UIBezierPath()
-        stride(from: 0, to: 2*MAX_SAMPLES-2, by: 2).forEach({
+        let paths: [UIBezierPath] = stride(from: 0, to: 2*MAX_SAMPLES-2, by: 2).map({
+            let path = UIBezierPath()
             path.move(to: points[$0])
             path.addLine(to: points[$0+1])
+            return path
         })
-        self.path = path
+        self.paths = paths
+        setNeedsDisplay()
+    }
+    
+    func setTime(_ pct:Float) {
+        percentage = pct
         setNeedsDisplay()
     }
     

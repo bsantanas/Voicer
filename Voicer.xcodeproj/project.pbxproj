@@ -19,6 +19,7 @@
 		64371E991DB7ACF3006AB2C5 /* NoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64371E981DB7ACF3006AB2C5 /* NoteCell.swift */; };
 		64371E9B1DB7C23D006AB2C5 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64371E9A1DB7C23D006AB2C5 /* Utilities.swift */; };
 		64D115CD1DCA439800808F10 /* UIBezierPath+Hermite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D115CC1DCA439800808F10 /* UIBezierPath+Hermite.swift */; };
+		64D115CF1DCB978800808F10 /* TouchDownGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D115CE1DCB978800808F10 /* TouchDownGestureRecognizer.swift */; };
 		64E0A7291DC7D2FF00855F14 /* RecordNoteAnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64E0A7281DC7D2FF00855F14 /* RecordNoteAnimationController.swift */; };
 		64E0A72B1DC7E73500855F14 /* SwipeInteractionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64E0A72A1DC7E73500855F14 /* SwipeInteractionController.swift */; };
 		64E0A72D1DCA394500855F14 /* VoiceGraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64E0A72C1DCA394500855F14 /* VoiceGraphView.swift */; };
@@ -56,6 +57,7 @@
 		64371E9A1DB7C23D006AB2C5 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		64CD20A1DFAEA00C9BB28070 /* Pods-VoicerUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VoicerUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-VoicerUITests/Pods-VoicerUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		64D115CC1DCA439800808F10 /* UIBezierPath+Hermite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIBezierPath+Hermite.swift"; sourceTree = "<group>"; };
+		64D115CE1DCB978800808F10 /* TouchDownGestureRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchDownGestureRecognizer.swift; sourceTree = "<group>"; };
 		64E0A7281DC7D2FF00855F14 /* RecordNoteAnimationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordNoteAnimationController.swift; sourceTree = "<group>"; };
 		64E0A72A1DC7E73500855F14 /* SwipeInteractionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeInteractionController.swift; sourceTree = "<group>"; };
 		64E0A72C1DCA394500855F14 /* VoiceGraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoiceGraphView.swift; sourceTree = "<group>"; };
@@ -134,6 +136,7 @@
 				64E0A7281DC7D2FF00855F14 /* RecordNoteAnimationController.swift */,
 				64E0A72A1DC7E73500855F14 /* SwipeInteractionController.swift */,
 				64D115CC1DCA439800808F10 /* UIBezierPath+Hermite.swift */,
+				64D115CE1DCB978800808F10 /* TouchDownGestureRecognizer.swift */,
 			);
 			name = Supporting;
 			sourceTree = "<group>";
@@ -385,6 +388,7 @@
 			files = (
 				64371E701DB6A1C4006AB2C5 /* AppDelegate.swift in Sources */,
 				64371E921DB6A66F006AB2C5 /* FeedViewController.swift in Sources */,
+				64D115CF1DCB978800808F10 /* TouchDownGestureRecognizer.swift in Sources */,
 				64E0A72D1DCA394500855F14 /* VoiceGraphView.swift in Sources */,
 				64E0A7291DC7D2FF00855F14 /* RecordNoteAnimationController.swift in Sources */,
 				64371E9B1DB7C23D006AB2C5 /* Utilities.swift in Sources */,

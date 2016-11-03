@@ -203,10 +203,10 @@
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="frb-rm-ehR">
                                 <state key="normal" title="Playback">
-                                    <color key="titleColor" red="0.49019607843137253" green="0.019607843137254902" blue="0.59215686274509804" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleColor" red="0.074509803921568626" green="0.51372549019607838" blue="0.59607843137254901" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
-                                    <action selector="playbackNote:" destination="Jan-d9-nEw" eventType="touchUpInside" id="11v-2x-xht"/>
+                                    <action selector="playbackNoteButton:" destination="Jan-d9-nEw" eventType="touchUpInside" id="Wop-2L-VtU"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wL3-BD-lzb">
@@ -221,13 +221,13 @@
                                 </state>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FmL-Nx-Sxx" customClass="VoiceGraphView" customModule="Voicer" customModuleProvider="target">
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="0.0" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="156" id="Kvb-ji-s8H"/>
                                 </constraints>
                             </view>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="B79-BP-x1N">
-                                <color key="tintColor" red="0.49019607843137253" green="0.019607843137254902" blue="0.59215686274509804" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="tintColor" red="0.074509803921568626" green="0.51372549019607838" blue="0.59607843137254901" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
                                     <action selector="slide:" destination="Jan-d9-nEw" eventType="valueChanged" id="xeU-Vz-cks"/>
                                 </connections>
@@ -253,18 +253,26 @@
                             <rect key="frame" x="113" y="6" width="150" height="33"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CgW-hn-69q">
-                                    <frame key="frameInset" minX="31" minY="6" width="88" height="21"/>
+                                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qg7-k3-90a">
+                                    <frame key="frameInset" width="150" height="33"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="New Note" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ydp-Uc-1sH">
+                                            <frame key="frameInset" minX="20" minY="6" width="111" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="27"/>
-                                    <color key="textColor" red="0.79676569183107393" green="0.75683210046243932" blue="0.96400934900475344" alpha="1" colorSpace="calibratedRGB"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
+                                </view>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         </view>
                         <barButtonItem key="rightBarButtonItem" title="Done" id="tSu-cp-9BJ">
+                            <color key="tintColor" red="0.87450980392156863" green="0.98039215686274506" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="dismissButtonTapped" destination="Jan-d9-nEw" id="12C-Un-667"/>
                             </connections>
@@ -289,7 +297,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="6ry-i7-7pk">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" red="0.29411764705882354" green="0.23137254901960785" blue="0.57647058823529407" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="barTintColor" red="0.31372549019607843" green="0.69411764705882351" blue="0.76470588235294112" alpha="1" colorSpace="calibratedRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" red="0.20392156862745098" green="0.14509803921568626" blue="0.47450980392156861" alpha="1" colorSpace="calibratedRGB"/>
                         </textAttributes>

@@ -66,6 +66,10 @@ class AddNoteViewController: UIViewController {
         recordButton.addTarget(self, action: #selector(self.startRecording), for: .touchDown)
         recordButton.addTarget(self, action: #selector(self.stopRecording), for: .touchUpInside)
         recordButton.addTarget(self, action: #selector(self.cancelRecording), for: .touchDragExit)
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(self.handleGesture))
+        graphView.addGestureRecognizer(pan)
+//        let tap = TouchDownGestureRecognizer(target: self, action: #selector(self.handleGesture))
+//        graphView.addGestureRecognizer(tap)
     }
     
     override func viewDidLayoutSubviews() {
@@ -167,6 +171,7 @@ class AddNoteViewController: UIViewController {
     func levelTimerCallback() {
         audioRecorder.updateMeters()
         if let _ = levels {
+            graphView.setTime(1)
             levels!.append(CGFloat(audioRecorder.averagePower(forChannel: 0)))
             graphView.setBarsPathWith(levels: levels!)
         }
@@ -179,10 +184,28 @@ class AddNoteViewController: UIViewController {
     
     func updateSlider() {
         if audioPlayer.isPlaying {
+           graphView.setTime(Float(audioPlayer.currentTime/audioPlayer.duration))
            audioSlider.value = Float(audioPlayer.currentTime)
         } else {
             sliderTimer?.invalidate()
             sliderTimer = nil
+        }
+    }
+    
+    func playbackNote() {
+        if (!audioRecorder.isRecording){
+            do {
+                try audioPlayer = AVAudioPlayer(contentsOf: audioRecorder.url)
+                audioPlayer.delegate = self
+            } catch {
+                print("Couldn't open player")
+            }
+            guard let _ = audioPlayer else { return }
+            audioPlayer.prepareToPlay()
+            audioSlider.maximumValue = Float(audioPlayer.duration)
+            audioSlider.value = 0.0
+            sliderTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(self.updateSlider), userInfo: nil, repeats: true)
+            audioPlayer.play()
         }
     }
 
@@ -227,21 +250,8 @@ class AddNoteViewController: UIViewController {
     }
     
     
-    @IBAction private func playbackNote(_ sender: UIButton) {
-        if (!audioRecorder.isRecording){
-            do {
-                try audioPlayer = AVAudioPlayer(contentsOf: audioRecorder.url)
-                audioPlayer.delegate = self
-            } catch {
-                print("Couldn't open player")
-            }
-            guard let _ = audioPlayer else { return }
-            audioPlayer.prepareToPlay()
-            audioSlider.maximumValue = Float(audioPlayer.duration)
-            audioSlider.value = 0.0
-            sliderTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.updateSlider), userInfo: nil, repeats: true)
-            audioPlayer.play()
-        }
+    @IBAction private func playbackNoteButton(_ sender: UIButton) {
+        playbackNote()
     }
     
     @IBAction private func dismissButtonTapped() {
@@ -251,6 +261,20 @@ class AddNoteViewController: UIViewController {
     @IBAction func slide(_ slider: UISlider) {
         guard let _ = audioPlayer else { return }
         audioPlayer.currentTime = TimeInterval(slider.value)
+        
+    }
+    
+    func handleGesture(pan:UIGestureRecognizer) {
+        guard let _ = audioPlayer else { return }
+        switch pan.state {
+        case .began, .changed:
+            let pct = Float(pan.location(in: graphView).x / graphView.frame.width)
+            print(pct)
+            graphView.setTime(pct)
+            audioPlayer.currentTime = TimeInterval(pct)*audioPlayer.duration
+        default:
+            return
+        }
     }
 
 }
@@ -259,5 +283,11 @@ class AddNoteViewController: UIViewController {
 extension AddNoteViewController: AVAudioRecorderDelegate, AVAudioPlayerDelegate {
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
         playbackButton.isEnabled = true
+    }
+}
+
+extension AddNoteViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
     }
 }
