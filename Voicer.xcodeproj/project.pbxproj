@@ -18,6 +18,7 @@
 		64371E971DB6AFFD006AB2C5 /* AddNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64371E961DB6AFFD006AB2C5 /* AddNoteViewController.swift */; };
 		64371E991DB7ACF3006AB2C5 /* NoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64371E981DB7ACF3006AB2C5 /* NoteCell.swift */; };
 		64371E9B1DB7C23D006AB2C5 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64371E9A1DB7C23D006AB2C5 /* Utilities.swift */; };
+		645D59871DD28A9B00EA525D /* SpeechViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645D59861DD28A9B00EA525D /* SpeechViewController.swift */; };
 		64D115CD1DCA439800808F10 /* UIBezierPath+Hermite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D115CC1DCA439800808F10 /* UIBezierPath+Hermite.swift */; };
 		64D115CF1DCB978800808F10 /* TouchDownGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D115CE1DCB978800808F10 /* TouchDownGestureRecognizer.swift */; };
 		64E0A7291DC7D2FF00855F14 /* RecordNoteAnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64E0A7281DC7D2FF00855F14 /* RecordNoteAnimationController.swift */; };
@@ -55,6 +56,7 @@
 		64371E961DB6AFFD006AB2C5 /* AddNoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNoteViewController.swift; sourceTree = "<group>"; };
 		64371E981DB7ACF3006AB2C5 /* NoteCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteCell.swift; sourceTree = "<group>"; };
 		64371E9A1DB7C23D006AB2C5 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		645D59861DD28A9B00EA525D /* SpeechViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeechViewController.swift; sourceTree = "<group>"; };
 		64CD20A1DFAEA00C9BB28070 /* Pods-VoicerUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VoicerUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-VoicerUITests/Pods-VoicerUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		64D115CC1DCA439800808F10 /* UIBezierPath+Hermite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIBezierPath+Hermite.swift"; sourceTree = "<group>"; };
 		64D115CE1DCB978800808F10 /* TouchDownGestureRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchDownGestureRecognizer.swift; sourceTree = "<group>"; };
@@ -166,6 +168,7 @@
 			children = (
 				64371E911DB6A66F006AB2C5 /* FeedViewController.swift */,
 				64371E961DB6AFFD006AB2C5 /* AddNoteViewController.swift */,
+				645D59861DD28A9B00EA525D /* SpeechViewController.swift */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -386,6 +389,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				645D59871DD28A9B00EA525D /* SpeechViewController.swift in Sources */,
 				64371E701DB6A1C4006AB2C5 /* AppDelegate.swift in Sources */,
 				64371E921DB6A66F006AB2C5 /* FeedViewController.swift in Sources */,
 				64D115CF1DCB978800808F10 /* TouchDownGestureRecognizer.swift in Sources */,

@@ -16,8 +16,8 @@ class NoteCell: UITableViewCell {
 
     static let formatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .medium
+        formatter.dateStyle = .short
+        formatter.timeStyle = .short
         return formatter
     }()
     
@@ -26,9 +26,9 @@ class NoteCell: UITableViewCell {
     }
     
     func configureWith(_ note: Note) {
-        titleLabel!.text = note.id
+        titleLabel!.text = "This is a very very long title with a lot of words that occupies two lines at least"//note.id 
         let date = NoteCell.formatter.string(from: note.timestamp)
-        dateLabel!.text = "created: \(date)"
+        dateLabel!.text = date
     }
     
     func flashBackground() {

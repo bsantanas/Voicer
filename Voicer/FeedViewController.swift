@@ -14,16 +14,11 @@ class FeedViewController: UIViewController {
     
     //MARK: Outlets
     @IBOutlet weak var tableView:UITableView!
-    @IBOutlet weak var segmentedControl:UISegmentedControl!
     @IBOutlet weak var recordButton:UIButton!
     @IBOutlet weak var overlay:UIView!
     
     //MARK: Variables
     let trendingNotes: Results<Note> = {
-        let realm = try! Realm()
-        return realm.objects(Note.self).sorted(byProperty: "timestamp", ascending: false)
-    }()
-    let recommendedNotes: Results<Note> = {
         let realm = try! Realm()
         return realm.objects(Note.self).sorted(byProperty: "timestamp", ascending: false)
     }()
@@ -43,6 +38,8 @@ class FeedViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tableView.estimatedRowHeight = 215
+        tableView.rowHeight = UITableViewAutomaticDimension
         tableView.delegate = self
         tableView.dataSource = self
         overlay.isHidden = true
@@ -66,9 +63,6 @@ class FeedViewController: UIViewController {
     
     // MARK: User Actions
     
-    @IBAction func segmentedControlDidChange(control: UISegmentedControl) {
-        tableView.reloadData()
-    }
     
     
     // MARK: Instance methods
@@ -87,37 +81,13 @@ class FeedViewController: UIViewController {
     func currentNotes() -> Results<Note> {
         if let _ = filteredNotes {
             return filteredNotes!
-        } else if segmentedControl.selectedSegmentIndex == 0 {
-            return trendingNotes
         } else {
-            return recommendedNotes
+            return trendingNotes
         }
     }
     
     func registerNotificationsForRealmCollections() {
-        
-        recommendedNotesToken = recommendedNotes.addNotificationBlock {[weak self]
-            (changes: RealmCollectionChange) in
-            guard let tableView = self?.tableView,
-                self?.currentNotes() == self?.recommendedNotes else { return }
-            
-            switch changes {
-            case .initial:
-                tableView.reloadData()
-                break
-            case .update(let results, let deletions, let insertions, let modifications):
-                tableView.beginUpdates()
                 
-                //re-order repos when new pushes happen
-                tableView.insertRows(at: insertions.map { IndexPath(row:$0,section:0 ) }, with: .automatic)
-                tableView.endUpdates()
-                break
-            case .error(let error):
-                print(error)
-                break
-            }
-        }
-        
         trendingNotesToken = trendingNotes.addNotificationBlock {[weak self]
             (changes: RealmCollectionChange) in
             guard let tableView = self?.tableView,

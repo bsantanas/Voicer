@@ -9,13 +9,15 @@
 import UIKit
 import AVFoundation
 import RealmSwift
+import Speech
 
-class AddNoteViewController: UIViewController {
+class AddNoteViewController: UIViewController, SFSpeechRecognizerDelegate {
     
     @IBOutlet weak var recordButton: UIButton!
     @IBOutlet weak var playbackButton: UIButton!
     @IBOutlet weak var graphView: VoiceGraphView!
-    @IBOutlet weak var audioSlider: UISlider!
+    @IBOutlet weak var textView: UITextView!
+    
     var identifier: String!
     private var audioRecorder: AVAudioRecorder!
     private var audioPlayer: AVAudioPlayer!
@@ -23,6 +25,12 @@ class AddNoteViewController: UIViewController {
     private var levelTimer: Timer?
     private var finishTimer: Timer?
     private var sliderTimer: Timer?
+    
+    // Speech
+    private let speechRecognizer = SFSpeechRecognizer(locale: Locale.init(identifier: "en-US"))!
+    private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
+    private var recognitionTask: SFSpeechRecognitionTask?
+    private let audioEngine = AVAudioEngine()
     
     var levels:[CGFloat]?
     
@@ -46,7 +54,7 @@ class AddNoteViewController: UIViewController {
         let recordingSession = AVAudioSession.sharedInstance()
         
         do {
-            try recordingSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
+            try recordingSession.setCategory(AVAudioSessionCategoryPlayAndRecord, with:.defaultToSpeaker)
             try recordingSession.setActive(true)
             recordingSession.requestRecordPermission() { [unowned self] allowed in
                 DispatchQueue.main.async {
@@ -62,12 +70,37 @@ class AddNoteViewController: UIViewController {
             // failed to get permissions!
         }
         
-        audioSlider.value = 0
         recordButton.addTarget(self, action: #selector(self.startRecording), for: .touchDown)
         recordButton.addTarget(self, action: #selector(self.stopRecording), for: .touchUpInside)
         recordButton.addTarget(self, action: #selector(self.cancelRecording), for: .touchDragExit)
         let pan = UIPanGestureRecognizer(target: self, action: #selector(self.handleGesture))
         graphView.addGestureRecognizer(pan)
+        
+        SFSpeechRecognizer.requestAuthorization { (authStatus) in
+            
+            var isButtonEnabled = false
+            
+            switch authStatus {
+            case .authorized:
+                isButtonEnabled = true
+                
+            case .denied:
+                isButtonEnabled = false
+                print("User denied access to speech recognition")
+                
+            case .restricted:
+                isButtonEnabled = false
+                print("Speech recognition restricted on this device")
+                
+            case .notDetermined:
+                isButtonEnabled = false
+                print("Speech recognition not yet authorized")
+            }
+            
+            OperationQueue.main.addOperation() {
+                self.recordButton.isEnabled = isButtonEnabled
+            }
+        }
 //        let tap = TouchDownGestureRecognizer(target: self, action: #selector(self.handleGesture))
 //        graphView.addGestureRecognizer(tap)
     }
@@ -185,7 +218,6 @@ class AddNoteViewController: UIViewController {
     func updateSlider() {
         if audioPlayer.isPlaying {
            graphView.setTime(Float(audioPlayer.currentTime/audioPlayer.duration))
-           audioSlider.value = Float(audioPlayer.currentTime)
         } else {
             sliderTimer?.invalidate()
             sliderTimer = nil
@@ -202,8 +234,6 @@ class AddNoteViewController: UIViewController {
             }
             guard let _ = audioPlayer else { return }
             audioPlayer.prepareToPlay()
-            audioSlider.maximumValue = Float(audioPlayer.duration)
-            audioSlider.value = 0.0
             sliderTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(self.updateSlider), userInfo: nil, repeats: true)
             audioPlayer.play()
         }
@@ -213,9 +243,13 @@ class AddNoteViewController: UIViewController {
     //MARK: - User Actions
     
     func startRecording() {
+        
+
         let recordingSession = AVAudioSession.sharedInstance()
         do {
-            try recordingSession.setActive(true)
+            try recordingSession.setCategory(AVAudioSessionCategoryPlayAndRecord, with:.defaultToSpeaker)
+            try recordingSession.setMode(AVAudioSessionModeMeasurement)
+            try recordingSession.setActive(true, with: .notifyOthersOnDeactivation)
             audioRecorder.record()
             levelTimer = Timer.scheduledTimer(timeInterval: 0.02, target: self, selector: #selector(self.levelTimerCallback), userInfo: nil, repeats: true)
             levels = []
@@ -228,9 +262,67 @@ class AddNoteViewController: UIViewController {
             loadRecorderErrorUI()
         }
         
+        if recognitionTask != nil {  //1
+            recognitionTask?.cancel()
+            recognitionTask = nil
+        }
+        
+        // Speech Recognition
+        
+        recognitionRequest = SFSpeechAudioBufferRecognitionRequest()  //3
+        
+        guard let inputNode = audioEngine.inputNode else {
+            fatalError("Audio engine has no input node")
+        }  //4
+        
+        guard let recognitionRequest = recognitionRequest else {
+            fatalError("Unable to create an SFSpeechAudioBufferRecognitionRequest object")
+        } //5
+        
+        recognitionRequest.shouldReportPartialResults = true  //6
+        
+        recognitionTask = speechRecognizer.recognitionTask(with: recognitionRequest, resultHandler: { (result, error) in  //7
+            
+            var isFinal = false  //8
+            
+            if result != nil {
+                
+                self.textView.text = result?.bestTranscription.formattedString  //9
+                isFinal = (result?.isFinal)!
+            }
+            
+            if error != nil || isFinal {  //10
+                self.audioEngine.stop()
+                inputNode.removeTap(onBus: 0)
+                
+                self.recognitionRequest = nil
+                self.recognitionTask = nil
+                
+            }
+        })
+        
+        let recordingFormat = inputNode.outputFormat(forBus: 0)  //11
+        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer, when) in
+            self.recognitionRequest?.append(buffer)
+        }
+        
+        audioEngine.prepare()  //12
+        
+        do {
+            try audioEngine.start()
+        } catch {
+            print("audioEngine couldn't start because of an error.")
+        }
+        
+        textView.text = "Say something, I'm listening!"
+        
     }
     
     func stopRecording() {
+        
+        audioEngine.stop()
+        recognitionRequest?.endAudio()
+        
         guard audioRecorder.isRecording else { return }
         
         UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 5, options: [], animations: {
@@ -246,6 +338,13 @@ class AddNoteViewController: UIViewController {
             }, completion: { finished in
         })
         finishRecording(success: false)
+        
+    }
+    
+    
+    func speechRecognizer(_ speechRecognizer: SFSpeechRecognizer, availabilityDidChange available: Bool) {
+        
+        print("speech recognizer changed to " + (available ? "available" : "disabled"))
         
     }
     
@@ -269,7 +368,6 @@ class AddNoteViewController: UIViewController {
         switch pan.state {
         case .began, .changed:
             let pct = Float(pan.location(in: graphView).x / graphView.frame.width)
-            print(pct)
             graphView.setTime(pct)
             audioPlayer.currentTime = TimeInterval(pct)*audioPlayer.duration
         default:
