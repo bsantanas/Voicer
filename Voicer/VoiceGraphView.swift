@@ -122,7 +122,7 @@ class VoiceGraphView: UIView {
         
         let points = Array(zip(signal, x)).map({ return CGPoint(x:$1,y:$0) })
         
-//        path = UIBezierPath(interpolating: points)
+        paths = [UIBezierPath(interpolating: points)]
         setNeedsDisplay()
     }
     
