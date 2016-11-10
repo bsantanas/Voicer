@@ -1,5 +1,5 @@
 //
-//  Utilities.swift
+//  GlobalUtilities.swift
 //  Voicer
 //
 //  Created by Bernardo Santana on 10/19/16.

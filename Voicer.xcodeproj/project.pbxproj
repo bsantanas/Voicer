@@ -17,8 +17,9 @@
 		64371E951DB6A6DA006AB2C5 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64371E941DB6A6DA006AB2C5 /* Note.swift */; };
 		64371E971DB6AFFD006AB2C5 /* AddNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64371E961DB6AFFD006AB2C5 /* AddNoteViewController.swift */; };
 		64371E991DB7ACF3006AB2C5 /* NoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64371E981DB7ACF3006AB2C5 /* NoteCell.swift */; };
-		64371E9B1DB7C23D006AB2C5 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64371E9A1DB7C23D006AB2C5 /* Utilities.swift */; };
+		64371E9B1DB7C23D006AB2C5 /* GlobalUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64371E9A1DB7C23D006AB2C5 /* GlobalUtilities.swift */; };
 		645D59871DD28A9B00EA525D /* SpeechViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645D59861DD28A9B00EA525D /* SpeechViewController.swift */; };
+		645D598C1DD524F300EA525D /* VoiceRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645D598B1DD524F300EA525D /* VoiceRecorder.swift */; };
 		64D115CD1DCA439800808F10 /* UIBezierPath+Hermite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D115CC1DCA439800808F10 /* UIBezierPath+Hermite.swift */; };
 		64D115CF1DCB978800808F10 /* TouchDownGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D115CE1DCB978800808F10 /* TouchDownGestureRecognizer.swift */; };
 		64E0A7291DC7D2FF00855F14 /* RecordNoteAnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64E0A7281DC7D2FF00855F14 /* RecordNoteAnimationController.swift */; };
@@ -55,8 +56,9 @@
 		64371E941DB6A6DA006AB2C5 /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		64371E961DB6AFFD006AB2C5 /* AddNoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNoteViewController.swift; sourceTree = "<group>"; };
 		64371E981DB7ACF3006AB2C5 /* NoteCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteCell.swift; sourceTree = "<group>"; };
-		64371E9A1DB7C23D006AB2C5 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		64371E9A1DB7C23D006AB2C5 /* GlobalUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalUtilities.swift; sourceTree = "<group>"; };
 		645D59861DD28A9B00EA525D /* SpeechViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeechViewController.swift; sourceTree = "<group>"; };
+		645D598B1DD524F300EA525D /* VoiceRecorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoiceRecorder.swift; sourceTree = "<group>"; };
 		64CD20A1DFAEA00C9BB28070 /* Pods-VoicerUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VoicerUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-VoicerUITests/Pods-VoicerUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		64D115CC1DCA439800808F10 /* UIBezierPath+Hermite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIBezierPath+Hermite.swift"; sourceTree = "<group>"; };
 		64D115CE1DCB978800808F10 /* TouchDownGestureRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchDownGestureRecognizer.swift; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 			children = (
 				647321AF1DC1503B0006A40E /* View */,
 				647321B11DC150530006A40E /* View Controllers */,
+				645D598D1DD524F700EA525D /* Utilities */,
 				647321B21DC150610006A40E /* Model */,
 				64371E931DB6A690006AB2C5 /* Supporting */,
 			);
@@ -132,25 +135,41 @@
 			isa = PBXGroup;
 			children = (
 				64371E6F1DB6A1C4006AB2C5 /* AppDelegate.swift */,
-				64371E8F1DB6A29E006AB2C5 /* Constants.swift */,
-				64371E9A1DB7C23D006AB2C5 /* Utilities.swift */,
 				64371E7B1DB6A1C5006AB2C5 /* Info.plist */,
-				64E0A7281DC7D2FF00855F14 /* RecordNoteAnimationController.swift */,
-				64E0A72A1DC7E73500855F14 /* SwipeInteractionController.swift */,
-				64D115CC1DCA439800808F10 /* UIBezierPath+Hermite.swift */,
-				64D115CE1DCB978800808F10 /* TouchDownGestureRecognizer.swift */,
+				64371E761DB6A1C5006AB2C5 /* Assets.xcassets */,
 			);
 			name = Supporting;
+			sourceTree = "<group>";
+		};
+		645D598D1DD524F700EA525D /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				64371E8F1DB6A29E006AB2C5 /* Constants.swift */,
+				64371E9A1DB7C23D006AB2C5 /* GlobalUtilities.swift */,
+				645D598B1DD524F300EA525D /* VoiceRecorder.swift */,
+				64D115CC1DCA439800808F10 /* UIBezierPath+Hermite.swift */,
+				64D115CE1DCB978800808F10 /* TouchDownGestureRecognizer.swift */,
+				645D598E1DD5257A00EA525D /* Transitions */,
+			);
+			name = Utilities;
+			sourceTree = "<group>";
+		};
+		645D598E1DD5257A00EA525D /* Transitions */ = {
+			isa = PBXGroup;
+			children = (
+				64E0A7281DC7D2FF00855F14 /* RecordNoteAnimationController.swift */,
+				64E0A72A1DC7E73500855F14 /* SwipeInteractionController.swift */,
+			);
+			name = Transitions;
 			sourceTree = "<group>";
 		};
 		647321AF1DC1503B0006A40E /* View */ = {
 			isa = PBXGroup;
 			children = (
-				647321B01DC150460006A40E /* Cells */,
 				64371E731DB6A1C5006AB2C5 /* Main.storyboard */,
-				64371E761DB6A1C5006AB2C5 /* Assets.xcassets */,
 				64371E781DB6A1C5006AB2C5 /* LaunchScreen.storyboard */,
 				64E0A72C1DCA394500855F14 /* VoiceGraphView.swift */,
+				647321B01DC150460006A40E /* Cells */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -395,10 +414,11 @@
 				64D115CF1DCB978800808F10 /* TouchDownGestureRecognizer.swift in Sources */,
 				64E0A72D1DCA394500855F14 /* VoiceGraphView.swift in Sources */,
 				64E0A7291DC7D2FF00855F14 /* RecordNoteAnimationController.swift in Sources */,
-				64371E9B1DB7C23D006AB2C5 /* Utilities.swift in Sources */,
+				64371E9B1DB7C23D006AB2C5 /* GlobalUtilities.swift in Sources */,
 				64D115CD1DCA439800808F10 /* UIBezierPath+Hermite.swift in Sources */,
 				64371E901DB6A29E006AB2C5 /* Constants.swift in Sources */,
 				64E0A72B1DC7E73500855F14 /* SwipeInteractionController.swift in Sources */,
+				645D598C1DD524F300EA525D /* VoiceRecorder.swift in Sources */,
 				64371E991DB7ACF3006AB2C5 /* NoteCell.swift in Sources */,
 				64371E971DB6AFFD006AB2C5 /* AddNoteViewController.swift in Sources */,
 				64371E951DB6A6DA006AB2C5 /* Note.swift in Sources */,
