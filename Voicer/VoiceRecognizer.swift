@@ -7,8 +7,45 @@
 //
 
 import UIKit
+import Speech
 
-class VoiceRecognizer: NSObject {
+class VoiceRecognizer: NSObject, SFSpeechRecognizerDelegate {
+    
+    // MARK: Vars
+    private let speechRecognizer = SFSpeechRecognizer(locale: Locale.init(identifier: "en-US"))!
+    private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
+    private var recognitionTask: SFSpeechRecognitionTask?
+    private let audioEngine = AVAudioEngine()
+    
+    override init() {
+        SFSpeechRecognizer.requestAuthorization { (authStatus) in
+            
+            var isButtonEnabled = false
+            
+            switch authStatus {
+            case .authorized:
+                isButtonEnabled = true
+                
+            case .denied:
+                isButtonEnabled = false
+                print("User denied access to speech recognition")
+                
+            case .restricted:
+                isButtonEnabled = false
+                print("Speech recognition restricted on this device")
+                
+            case .notDetermined:
+                isButtonEnabled = false
+                print("Speech recognition not yet authorized")
+            }
+            
+            OperationQueue.main.addOperation() {
+                self.recordButton.isEnabled = isButtonEnabled
+            }
+        }
+
+    }
+    
     func startRecognizing() {
         //        if recognitionTask != nil {  //1
         //            recognitionTask?.cancel()
@@ -68,5 +105,11 @@ class VoiceRecognizer: NSObject {
     func stopRecognizing() {
         //        audioEngine.stop()
         //        recognitionRequest?.endAudio()
+    }
+    
+    func speechRecognizer(_ speechRecognizer: SFSpeechRecognizer, availabilityDidChange available: Bool) {
+        
+        print("speech recognizer changed to " + (available ? "available" : "disabled"))
+        
     }
 }

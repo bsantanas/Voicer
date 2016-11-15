@@ -9,7 +9,6 @@
 import UIKit
 import AVFoundation
 
-
 protocol VoiceRecorderDelegate: class {
     func didStartRecording()
     func didStopRecording()
@@ -20,15 +19,23 @@ class VoiceRecorder:NSObject, AVAudioRecorderDelegate {
     
     // MARK: Vars
     weak var delegate:VoiceRecorderDelegate?
-    var filename:String
+    private var filename:String
     private var audioRecorder: AVAudioRecorder!
-    private var audioPlayer: AVAudioPlayer!
-    private(set) var prepared = false
+    private var prepared = false
+    
+    var isRecording: Bool { if let _ = audioRecorder {
+        return audioRecorder.isRecording
+    } else {
+        return false
+        }
+    }
     
     // MARK: - Lifecicle
     
     init(filename:String) {
         self.filename = filename
+        super.init()
+        
         prepareAudioRecorder()
     }
     
@@ -39,7 +46,7 @@ class VoiceRecorder:NSObject, AVAudioRecorderDelegate {
     // MARK: - API 
     
     func startRecording() {
-        guard prepared else { prepareAudioRecorder() }
+        guard prepared else { prepareAudioRecorder(); return }
         
         let recordingSession = AVAudioSession.sharedInstance()
         do {
