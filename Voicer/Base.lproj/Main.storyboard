@@ -260,9 +260,6 @@
                                 <state key="normal" title="Playback">
                                     <color key="titleColor" red="0.074509803921568626" green="0.51372549019607838" blue="0.59607843137254901" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
-                                <connections>
-                                    <action selector="playbackNoteButton:" destination="Jan-d9-nEw" eventType="touchUpInside" id="Wop-2L-VtU"/>
-                                </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FmL-Nx-Sxx" customClass="VoiceGraphView" customModule="Voicer" customModuleProvider="target">
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -295,13 +292,6 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LzR-Y8-HPZ">
-                                <frame key="frameInset" minX="172" minY="629" width="46" height="30"/>
-                                <state key="normal" title="Button"/>
-                                <connections>
-                                    <segue destination="pil-Sz-nv7" kind="presentation" id="b93-2e-72b"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -315,8 +305,6 @@
                             <constraint firstAttribute="trailingMargin" secondItem="FmL-Nx-Sxx" secondAttribute="trailing" id="VAk-jh-BJj"/>
                             <constraint firstItem="WPs-MI-d3t" firstAttribute="top" secondItem="frb-rm-ehR" secondAttribute="bottom" constant="22" id="hyB-Lp-qoP"/>
                             <constraint firstItem="TyO-c2-Uij" firstAttribute="top" secondItem="Mbx-oT-Ug1" secondAttribute="bottom" constant="23" id="iIx-Qk-M9W"/>
-                            <constraint firstItem="LzR-Y8-HPZ" firstAttribute="centerX" secondItem="kjC-j8-eDS" secondAttribute="centerX" id="jvi-t3-pUj"/>
-                            <constraint firstItem="m3H-0n-M9z" firstAttribute="top" secondItem="LzR-Y8-HPZ" secondAttribute="bottom" constant="8" id="k4O-Lm-qpv"/>
                             <constraint firstAttribute="leadingMargin" secondItem="FmL-Nx-Sxx" secondAttribute="leading" id="qgj-3f-udJ"/>
                             <constraint firstItem="frb-rm-ehR" firstAttribute="centerX" secondItem="kjC-j8-eDS" secondAttribute="centerX" id="syc-1t-sbQ"/>
                             <constraint firstAttribute="trailingMargin" secondItem="wL3-BD-lzb" secondAttribute="trailing" id="vQF-21-i8c"/>
@@ -477,6 +465,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="user" width="20" height="17"/>
+        <image name="user" width="40" height="34"/>
     </resources>
 </document>

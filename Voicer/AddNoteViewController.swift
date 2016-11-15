@@ -19,9 +19,9 @@ class AddNoteViewController: UIViewController {
     
     var identifier: String!
     private var note: Note?
-    private var levelGaugeTimer: Timer?
-    private var endNoteTimer: Timer?
-    private var progressTimer: Timer?
+    fileprivate var levelGaugeTimer: Timer?
+    fileprivate var endNoteTimer: Timer?
+    fileprivate var progressTimer: Timer?
     private var recorder: VoiceRecorder!
     private var player: VoicePlayer!
     
@@ -30,14 +30,8 @@ class AddNoteViewController: UIViewController {
     // MARK: Lifecycle
     
     deinit {
-        levelGaugeTimer?.invalidate()
-        levelGaugeTimer?.invalidate()
-        progressTimer?.invalidate()
-        endNoteTimer = nil
-        endNoteTimer = nil
-        progressTimer = nil
+        invalidateTimers()
     }
-    
     
     // MARK: View Lifecycle
     
@@ -47,9 +41,10 @@ class AddNoteViewController: UIViewController {
         identifier = String(arc4random()) + ".m4a" // Will remove this
         recorder = VoiceRecorder(filename:identifier)
         
-        recordButton.addTarget(self, action: #selector(self.startRecording), for: .touchDown)
-        recordButton.addTarget(self, action: #selector(self.stopRecording), for: .touchUpInside)
-        recordButton.addTarget(self, action: #selector(self.cancelRecording), for: .touchDragExit)
+        recordButton.addTarget(self, action: #selector(self.startRecordingButtonTapped), for: .touchDown)
+        recordButton.addTarget(self, action: #selector(self.stopRecordingButtonTapped), for: .touchUpInside)
+        recordButton.addTarget(self, action: #selector(self.cancelRecordingButtonTapped), for: .touchDragExit)
+        playbackButton.addTarget(self, action: #selector(self.playbackButtonTapped), for: .touchUpInside)
         let pan = UIPanGestureRecognizer(target: self, action: #selector(self.handleGesture))
         graphView.addGestureRecognizer(pan)
         
@@ -71,19 +66,22 @@ class AddNoteViewController: UIViewController {
     
     //MARK: - User Actions
     
-    func startRecording() {
+    func startRecordingButtonTapped() {
         recorder.startRecording()
+        animateStartRecording()
+        startRecordingTimers()
+        
     }
     
-    func stopRecording() {
+    func stopRecordingButtonTapped() {
         recorder.stopRecording()
     }
     
-    func cancelRecording() {
+    func cancelRecordingButtonTapped() {
         recorder.cancelRecording()
     }
     
-    @IBAction private func playbackNoteButton(_ sender: UIButton) {
+    func playbackButtonTapped() {
         playbackNote()
     }
     
@@ -115,20 +113,7 @@ class AddNoteViewController: UIViewController {
         }
     }
     
-    private func finishRecording(success: Bool) {
-        audioRecorder.stop()
-        levelTimer?.invalidate()
-        levelTimer = nil
-        finishTimer?.invalidate()
-        finishTimer = nil
-        
-        if success {
-            //
-        } else {
-            // recording failed :(
-        }
-        
-        
+    private func storeNoteInRealm() {
         if let realm = note?.realm {
             try! realm.write {
                 note!.timestamp = Date()
@@ -153,37 +138,92 @@ class AddNoteViewController: UIViewController {
         }
     }
     
-    func finishTimerCallback() {
-        finishTimer = nil
-        stopRecording()
+    func endNoteTimerCallback() {
+        recorder.stopRecording()
+        invalidateTimers()
     }
     
-    func updateSlider() {
+    func updateProgress() {
         if let pct = player.currentPercentage {
            graphView.setTime(pct)
         } else {
-            sliderTimer?.invalidate()
-            sliderTimer = nil
+            invalidateTimers()
         }
     }
     
-    func playbackNote() {
+    private func playbackNote() {
         if (!recorder.isRecording) {
             player.playVoiceNote()
+            startPlaybackTimer()
+        }
+    }
+    
+    private func animateStartRecording() {
+        UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 5, options: [], animations: {
+            self.recordButton.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
+            }, completion: nil)
+    }
+    
+    fileprivate func animateStopRecording() {
+        UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 5, options: [], animations: {
+            self.recordButton.transform = CGAffineTransform.identity
+            }, completion: { finished in
+        })
+    }
+    
+    private func startRecordingTimers() {
+        levelGaugeTimer = Timer.scheduledTimer(timeInterval: 0.02, target: self, selector: #selector(self.levelTimerCallback), userInfo: nil, repeats: true)
+        endNoteTimer = Timer.scheduledTimer(timeInterval: 30, target: self, selector: #selector(self.endNoteTimerCallback), userInfo: nil, repeats: false)
+        
+    }
+    
+    private func startPlaybackTimer() {
+        progressTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(self.updateProgress), userInfo: nil, repeats: true)
+    }
+    
+    fileprivate func invalidateTimers() {
+        for t in [levelGaugeTimer,endNoteTimer,progressTimer] {
+            if t != nil {
+                var timer = t
+                timer?.invalidate()
+                timer = nil
+            }
         }
     }
 
 }
 
-
-extension AddNoteViewController: AVAudioRecorderDelegate, AVAudioPlayerDelegate {
-    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
-        playbackButton.isEnabled = true
+extension AddNoteViewController: VoiceRecorderDelegate, VoicePlayerDelegate {
+    
+    func didStartRecording() {
+        //
+    }
+    
+    func didStopRecording() {
+        animateStopRecording()
+        invalidateTimers()
+    }
+    func didCancelRecording(error: Error?) {
+        animateStopRecording()
+        invalidateTimers()
+    }
+    
+    func didStartPlaying() {
+        //
+    }
+    
+    func didFinishPlaying() {
+        invalidateTimers()
+    }
+    
+    func playerWasCancelledWith(error: Error?) {
+        invalidateTimers()
     }
 }
 
-extension AddNoteViewController: UIGestureRecognizerDelegate {
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
-    }
-}
+
+//extension AddNoteViewController: UIGestureRecognizerDelegate {
+//    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+//        return true
+//    }
+//}

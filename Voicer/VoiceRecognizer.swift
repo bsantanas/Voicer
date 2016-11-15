@@ -40,7 +40,7 @@ class VoiceRecognizer: NSObject, SFSpeechRecognizerDelegate {
             }
             
             OperationQueue.main.addOperation() {
-                self.recordButton.isEnabled = isButtonEnabled
+                //self.recordButton.isEnabled = isButtonEnabled
             }
         }
 
