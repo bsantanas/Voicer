@@ -12,6 +12,7 @@ class NoteCell: UITableViewCell {
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var graphView: VoiceGraphView!
     var tapAction: ((UITableViewCell) -> Void)?
 
     static let formatter: DateFormatter = {
@@ -29,6 +30,7 @@ class NoteCell: UITableViewCell {
         titleLabel!.text = "This is a very very long title with a lot of words that occupies two lines at least"//note.id 
         let date = NoteCell.formatter.string(from: note.timestamp)
         dateLabel!.text = date
+        graphView.setBarsPathWith(levels: note.wavePoints.map({ CGFloat($0.value) }))
     }
     
     func flashBackground() {

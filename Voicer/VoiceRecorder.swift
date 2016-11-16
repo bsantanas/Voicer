@@ -68,9 +68,8 @@ class VoiceRecorder:NSObject, AVAudioRecorderDelegate {
     func stopRecording() {
 
         guard prepared && audioRecorder.isRecording else { return }
-        
+    
         audioRecorder.stop()
-        delegate?.didStopRecording()
         
     }
     

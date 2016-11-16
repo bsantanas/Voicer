@@ -91,7 +91,7 @@ class FeedViewController: UIViewController {
         trendingNotesToken = trendingNotes.addNotificationBlock {[weak self]
             (changes: RealmCollectionChange) in
             guard let tableView = self?.tableView,
-                self?.currentNotes() == self?.trendingNotesToken else { return }
+                self?.currentNotes() == self?.trendingNotes else { return }
             
             switch changes {
             case .initial:
@@ -99,8 +99,8 @@ class FeedViewController: UIViewController {
                 break
             case .update(let results, let deletions, let insertions, let modifications):
                 tableView.beginUpdates()
-                
-                //re-order repos when new pushes happen
+                tableView.deleteRows(at: deletions.map { IndexPath(row:$0,section:0 )}, with: .automatic)
+                tableView.reloadRows(at: modifications.map { IndexPath(row:$0,section:0 )}, with: .automatic)
                 tableView.insertRows(at: insertions.map { IndexPath(row:$0,section:0 ) }, with: .automatic)
                 tableView.endUpdates()
                 break
@@ -185,7 +185,9 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
         let notes = currentNotes()
         let note = notes[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: ReuseIdentifiers.noteCell) as! NoteCell
-        cell.configureWith(note)
+        DispatchQueue.main.async {
+            cell.configureWith(note)
+        }
         cell.tapAction = { (cell) in
             self.playAudioFileFromNoteAt(index: (tableView.indexPath(for: cell)?.row)!)
         }

@@ -19,7 +19,11 @@ struct ReuseIdentifiers {
 }
 
 struct Colors {
-    static let green = UIColor(red:80/255,green:177/255,blue:195/255,alpha:1)
+    struct green {
+        static let normal = UIColor(red:80/255,green:177/255,blue:195/255,alpha:1)
+        static let dark = UIColor(red:20/255,green:130/255,blue:151/255,alpha:1)
+        static let light = UIColor(red:189/255,green:238/255,blue:247/255,alpha:1)
+    }
     static let red = UIColor(red:255/255,green:66/255,blue:66/255,alpha:1)
 }
 

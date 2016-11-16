@@ -56,7 +56,7 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="215" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="UVa-iy-W5W">
-                                <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="noteCell" rowHeight="215" id="Oo1-pd-cvP" customClass="NoteCell" customModule="Voicer" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="215"/>
@@ -69,14 +69,16 @@
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mLx-Kx-pxm">
                                                             <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="18"/>
-                                                            <nil key="textColor"/>
+                                                            <color key="textColor" red="0.068661659955978394" green="0.3238186240196228" blue="0.38467085361480713" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k48-sT-9ed">
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="39" id="q1S-2z-0dv"/>
                                                             </constraints>
-                                                            <state key="normal" title="Reply"/>
+                                                            <state key="normal" title="Reply">
+                                                                <color key="titleColor" red="0.32918351890000003" green="0.59914427999999997" blue="0.65098881720000001" alpha="1" colorSpace="calibratedRGB"/>
+                                                            </state>
                                                         </button>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="user" translatesAutoresizingMaskIntoConstraints="NO" id="jaZ-o4-vrS">
                                                             <constraints>
@@ -86,7 +88,7 @@
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bernardo Santana" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZaW-Sh-mKR">
                                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                            <nil key="textColor"/>
+                                                            <color key="textColor" red="0.32918351888656616" green="0.59914427995681763" blue="0.65098881721496582" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="#Sports" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4c2-lh-jvf">
@@ -107,7 +109,7 @@
                                                             <color key="textColor" red="0.53160511359999996" green="0.53160511359999996" blue="0.53160511359999996" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DVr-bx-OCS">
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DVr-bx-OCS" customClass="VoiceGraphView" customModule="Voicer" customModuleProvider="target">
                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="70" id="ske-xz-Sh6"/>
@@ -117,7 +119,9 @@
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="30" id="SAi-Io-U78"/>
                                                             </constraints>
-                                                            <state key="normal" title="Like"/>
+                                                            <state key="normal" title="Like">
+                                                                <color key="titleColor" red="0.32918351890000003" green="0.59914427999999997" blue="0.65098881720000001" alpha="1" colorSpace="calibratedRGB"/>
+                                                            </state>
                                                         </button>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xwc-7A-alg">
                                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
@@ -164,13 +168,14 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="dateLabel" destination="xwc-7A-alg" id="yQd-X2-zFp"/>
+                                            <outlet property="graphView" destination="DVr-bx-OCS" id="Gs1-26-iVw"/>
                                             <outlet property="titleLabel" destination="mLx-Kx-pxm" id="bjP-6f-MSI"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nab-iR-hgG">
-                                <color key="backgroundColor" red="1" green="0.027805624138221741" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="1" green="0.25882352941176467" blue="0.25882352941176467" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="P5p-XD-5Xq"/>
                                     <constraint firstAttribute="width" constant="60" id="y9a-2u-ssc"/>
@@ -198,6 +203,7 @@
                     <navigationItem key="navigationItem" id="eWh-DN-WTQ">
                         <nil key="title"/>
                         <barButtonItem key="leftBarButtonItem" title="Menu" id="U7S-0w-KjD">
+                            <color key="tintColor" red="0.74117647060000003" green="0.93333333330000001" blue="0.96862745100000003" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <segue destination="EsT-wh-VGb" kind="presentation" id="ZF9-UO-qR2"/>
                             </connections>
@@ -210,6 +216,7 @@
                             <textInputTraits key="textInputTraits"/>
                         </textField>
                         <barButtonItem key="rightBarButtonItem" title="X" id="wdL-ZJ-RUb">
+                            <color key="tintColor" red="0.74117647060000003" green="0.93333333330000001" blue="0.96862745100000003" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <segue destination="TUD-2a-QNB" kind="presentation" id="k5w-Jc-90N"/>
                             </connections>
@@ -258,7 +265,7 @@
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="frb-rm-ehR">
                                 <state key="normal" title="Playback">
-                                    <color key="titleColor" red="0.074509803921568626" green="0.51372549019607838" blue="0.59607843137254901" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleColor" red="0.23137254900000001" green="0.62352941179999999" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FmL-Nx-Sxx" customClass="VoiceGraphView" customModule="Voicer" customModuleProvider="target">
@@ -432,9 +439,10 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="9Ji-wv-mge" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="dqB-uK-eff">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="dqB-uK-eff">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.31372549020000001" green="0.69411764710000001" blue="0.76470588240000004" alpha="1" colorSpace="calibratedRGB"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>

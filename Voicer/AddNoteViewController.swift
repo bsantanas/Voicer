@@ -66,16 +66,7 @@ class AddNoteViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         recordButton.layer.cornerRadius = recordButton.frame.width/2
     }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == SegueIdentifiers.unwindToHome {
-            guard let _ = note else { return }
-            let realm = try! Realm()
-            try! realm.write {
-                realm.delete(note!)
-            }
-        }
-    }
+
     
     //MARK: - User Actions
     
@@ -137,17 +128,19 @@ class AddNoteViewController: UIViewController {
         }
     }
     
-    private func storeNoteInRealm() {
+    fileprivate func storeNoteInRealm() {
         if let realm = note?.realm {
             try! realm.write {
                 note!.timestamp = Date()
+                note?.wavePoints.removeAll()
+                levels?.forEach({ note?.wavePoints.append(Point(Double($0))) })
             }
         } else {
             let realm = try! Realm()
             try! realm.write {
-                note = Note()
-                note!.id = identifier
-                note!.timestamp = Date()
+                note = Note(identifier, timestamp: Date())
+                note?.wavePoints.removeAll()
+                levels?.forEach({ note?.wavePoints.append(Point(Double($0))) })
                 realm.add(note!)
             }
         }
@@ -261,7 +254,9 @@ extension AddNoteViewController: VoiceRecorderDelegate, VoicePlayerDelegate {
     func didStopRecording() {
         animateStopRecording()
         invalidateTimers()
+        storeNoteInRealm()
     }
+    
     func didCancelRecording(error: Error?) {
         animateStopRecording()
         invalidateTimers()
