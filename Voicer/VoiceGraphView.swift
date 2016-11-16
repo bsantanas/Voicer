@@ -28,6 +28,7 @@ class VoiceGraphView: UIView {
     }
     
     func setBarsPathWith(levels:[CGFloat]) {
+        print(levels)
         var y = levels
         let min = y.min()
         let max = y.max()

@@ -67,14 +67,15 @@ class FeedViewController: UIViewController {
     
     // MARK: Instance methods
     
-    func playAudioFileFromNoteAt(index: Int) {
+    func playPauseAudioFileFromNoteAt(index: Int) {
         do {
             let notes = currentNotes()
-            let url = getDocumentsDirectory().appendingPathComponent(notes[index].id)
-            try audioPlayer = AVAudioPlayer(contentsOf: url)
+            //let url = getDocumentsDirectory().appendingPathComponent(notes[index].id)
+            //try audioPlayer = AVAudioPlayer(contentsOf: url)
+            try audioPlayer = AVAudioPlayer(data: notes[index].data as Data)
             audioPlayer.play()
-        } catch {
-            print("Couldn't open player")
+        } catch let error {
+            print("Couldn't open player \(error)")
         }
     }
     
@@ -189,7 +190,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
             cell.configureWith(note)
         }
         cell.tapAction = { (cell) in
-            self.playAudioFileFromNoteAt(index: (tableView.indexPath(for: cell)?.row)!)
+            self.playPauseAudioFileFromNoteAt(index: (tableView.indexPath(for: cell)?.row)!)
         }
         
         return cell

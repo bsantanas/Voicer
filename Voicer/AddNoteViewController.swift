@@ -33,8 +33,7 @@ class AddNoteViewController: UIViewController {
             return _player
         }
     }
-    
-    var levels:[CGFloat]?
+    var levels = [CGFloat]()
     
     // MARK: Lifecycle
     
@@ -133,14 +132,25 @@ class AddNoteViewController: UIViewController {
             try! realm.write {
                 note!.timestamp = Date()
                 note?.wavePoints.removeAll()
-                levels?.forEach({ note?.wavePoints.append(Point(Double($0))) })
+                levels.forEach({ note?.wavePoints.append(Point(Double($0))) })
+                do {
+                    try note?.data = NSData(contentsOf: recorder.fileURL)
+                } catch {
+                    print("couldnt add data to note")
+                }
+                
             }
         } else {
             let realm = try! Realm()
             try! realm.write {
                 note = Note(identifier, timestamp: Date())
                 note?.wavePoints.removeAll()
-                levels?.forEach({ note?.wavePoints.append(Point(Double($0))) })
+                levels.forEach({ note?.wavePoints.append(Point(Double($0))) })
+                do {
+                    try note?.data = NSData(contentsOf: recorder.fileURL)
+                } catch {
+                    print("couldnt add data to note")
+                }
                 realm.add(note!)
             }
         }
@@ -148,10 +158,10 @@ class AddNoteViewController: UIViewController {
     }
     
     func updateLevels() {
-        if let _ = levels {
+        if recorder.isRecording {
             graphView.setTime(1)
-            levels!.append(recorder.averagePower())
-            graphView.setBarsPathWith(levels: levels!)
+            levels.append(recorder.averagePower())
+            graphView.setBarsPathWith(levels: levels)
         }
     }
     
@@ -252,8 +262,8 @@ extension AddNoteViewController: VoiceRecorderDelegate, VoicePlayerDelegate {
     }
     
     func didStopRecording() {
-        animateStopRecording()
         invalidateTimers()
+        animateStopRecording()
         storeNoteInRealm()
     }
     

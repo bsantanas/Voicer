@@ -14,6 +14,13 @@ class NoteCell: UITableViewCell {
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var graphView: VoiceGraphView!
     var tapAction: ((UITableViewCell) -> Void)?
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+    
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.tappedOnGraph(tap:)))
+        self.graphView.addGestureRecognizer(tap)
+    }
 
     static let formatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -41,7 +48,7 @@ class NoteCell: UITableViewCell {
         })
     }
 
-    @IBAction func buttonTap(sender: AnyObject) {
+    func tappedOnGraph(tap: UITapGestureRecognizer) {
         tapAction?(self)
     }
 }
