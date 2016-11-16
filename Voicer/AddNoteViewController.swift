@@ -23,7 +23,16 @@ class AddNoteViewController: UIViewController {
     fileprivate var endNoteTimer: Timer?
     fileprivate var progressTimer: Timer?
     private var recorder: VoiceRecorder!
-    private var player: VoicePlayer!
+    fileprivate var _player: VoicePlayer?
+    private var player: VoicePlayer? {
+        // Obj-C approach to enable safe access to the voice player
+        get {
+            if _player == nil {
+                _player = VoicePlayer(file: self.recorder.fileURL)
+            }
+            return _player
+        }
+    }
     
     var levels:[CGFloat]?
     
@@ -41,8 +50,6 @@ class AddNoteViewController: UIViewController {
         identifier = String(arc4random()) + ".m4a" // Will remove this later
         recorder = VoiceRecorder(filename:identifier)
         recorder.delegate = self
-        player = VoicePlayer(file: recorder.fileURL)
-        player.delegate = self
         
         recordButton.addTarget(self, action: #selector(self.recordingButtonTouchDown), for: .touchDown)
         recordButton.addTarget(self, action: #selector(self.recordingButtonTouchUpInside), for: .touchUpInside)
@@ -50,6 +57,9 @@ class AddNoteViewController: UIViewController {
         playbackButton.addTarget(self, action: #selector(self.playbackButtonTapped), for: .touchUpInside)
         let pan = UIPanGestureRecognizer(target: self, action: #selector(self.handleGesture))
         graphView.addGestureRecognizer(pan)
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap))
+        graphView.addGestureRecognizer(tap)
         
     }
     
@@ -85,7 +95,7 @@ class AddNoteViewController: UIViewController {
     }
     
     func playbackButtonTapped() {
-        playbackNote()
+        playbackOrPauseNote()
     }
     
     @IBAction private func dismissButtonTapped() {
@@ -93,11 +103,22 @@ class AddNoteViewController: UIViewController {
     }
     
     func handleGesture(pan:UIGestureRecognizer) {
+        guard let _ = player else { return }
+        
         switch pan.state {
         case .began, .changed:
             let pct = Float(pan.location(in: graphView).x / graphView.frame.width)
             graphView.setTime(pct)
-            player.currentPercentage = pct
+            player!.currentPercentage = pct
+        default:
+            return
+        }
+    }
+    
+    func handleTap(tap:UITapGestureRecognizer) {
+        switch tap.state {
+        case .began, .ended :
+            playbackOrPauseNote()
         default:
             return
         }
@@ -133,7 +154,7 @@ class AddNoteViewController: UIViewController {
         
     }
     
-    func levelTimerCallback() {
+    func updateLevels() {
         if let _ = levels {
             graphView.setTime(1)
             levels!.append(recorder.averagePower())
@@ -147,17 +168,26 @@ class AddNoteViewController: UIViewController {
     }
     
     func updateProgress() {
-        if let pct = player.currentPercentage {
-           graphView.setTime(pct)
-        } else {
-            invalidateTimers()
+
+        if let pct = player?.currentPercentage {
+            graphView.setTime(pct)
+            if pct > 0.98 {
+                invalidateTimers()
+            }
         }
     }
     
-    private func playbackNote() {
+    private func playbackOrPauseNote() {
+        guard let _ = player else { return }
+        
         if (!recorder.isRecording) {
-            player.playVoiceNote()
-            startPlaybackTimer()
+            if player!.isPlaying {
+                player!.pauseVoiceNote()
+                invalidateTimers()
+            } else {
+                player!.playVoiceNote()
+                startPlaybackTimer()
+            }
         }
     }
     
@@ -176,7 +206,7 @@ class AddNoteViewController: UIViewController {
     
     fileprivate func startRecordingTimers() {
         if levelGaugeTimer == nil {
-            levelGaugeTimer = Timer.scheduledTimer(timeInterval: 0.02, target: self, selector: #selector(self.levelTimerCallback), userInfo: nil, repeats: true)
+            levelGaugeTimer = Timer.scheduledTimer(timeInterval: 0.02, target: self, selector: #selector(self.updateLevels), userInfo: nil, repeats: true)
         }
         if endNoteTimer == nil {
             endNoteTimer = Timer.scheduledTimer(timeInterval: 30, target: self, selector: #selector(self.endNoteTimerCallback), userInfo: nil, repeats: false)
@@ -203,17 +233,29 @@ class AddNoteViewController: UIViewController {
         }
         
         if let _ = endNoteTimer {
-            progressTimer?.invalidate()
-            progressTimer = nil
+            endNoteTimer?.invalidate()
+            endNoteTimer = nil
         }
         
       }
+    
+    fileprivate func removeRecordedFileFromDirectory() {
+        let fileManager = FileManager.default
+        do {
+            print(recorder.fileURL.absoluteString)
+            try fileManager.removeItem(atPath: recorder.fileURL.absoluteString)
+        } catch {
+            print("Could not delete file")
+        }
+    }
 
 }
 
 extension AddNoteViewController: VoiceRecorderDelegate, VoicePlayerDelegate {
     
     func didStartRecording() {
+        progressTimer?.invalidate()
+        _player = nil
         levels = []
     }
     
@@ -224,6 +266,9 @@ extension AddNoteViewController: VoiceRecorderDelegate, VoicePlayerDelegate {
     func didCancelRecording(error: Error?) {
         animateStopRecording()
         invalidateTimers()
+        levels = []
+        graphView.clearGraph()
+        removeRecordedFileFromDirectory()
     }
     
     func didStartPlaying() {
@@ -238,10 +283,3 @@ extension AddNoteViewController: VoiceRecorderDelegate, VoicePlayerDelegate {
         invalidateTimers()
     }
 }
-
-
-//extension AddNoteViewController: UIGestureRecognizerDelegate {
-//    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-//        return true
-//    }
-//}

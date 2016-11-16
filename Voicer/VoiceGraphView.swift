@@ -179,5 +179,8 @@ class VoiceGraphView: UIView {
         setNeedsDisplay()
     }
     
-
+    func clearGraph() {
+        paths = []
+        setNeedsDisplay()
+    }
 }
