@@ -38,12 +38,15 @@ class AddNoteViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        identifier = String(arc4random()) + ".m4a" // Will remove this
+        identifier = String(arc4random()) + ".m4a" // Will remove this later
         recorder = VoiceRecorder(filename:identifier)
+        recorder.delegate = self
+        player = VoicePlayer(file: recorder.fileURL)
+        player.delegate = self
         
-        recordButton.addTarget(self, action: #selector(self.startRecordingButtonTapped), for: .touchDown)
-        recordButton.addTarget(self, action: #selector(self.stopRecordingButtonTapped), for: .touchUpInside)
-        recordButton.addTarget(self, action: #selector(self.cancelRecordingButtonTapped), for: .touchDragExit)
+        recordButton.addTarget(self, action: #selector(self.recordingButtonTouchDown), for: .touchDown)
+        recordButton.addTarget(self, action: #selector(self.recordingButtonTouchUpInside), for: .touchUpInside)
+        recordButton.addTarget(self, action: #selector(self.recordingButtonTouchUpOutside), for: .touchDragExit)
         playbackButton.addTarget(self, action: #selector(self.playbackButtonTapped), for: .touchUpInside)
         let pan = UIPanGestureRecognizer(target: self, action: #selector(self.handleGesture))
         graphView.addGestureRecognizer(pan)
@@ -66,18 +69,18 @@ class AddNoteViewController: UIViewController {
     
     //MARK: - User Actions
     
-    func startRecordingButtonTapped() {
+    func recordingButtonTouchDown() {
         recorder.startRecording()
         animateStartRecording()
         startRecordingTimers()
         
     }
     
-    func stopRecordingButtonTapped() {
+    func recordingButtonTouchUpInside() {
         recorder.stopRecording()
     }
     
-    func cancelRecordingButtonTapped() {
+    func recordingButtonTouchUpOutside() {
         recorder.cancelRecording()
     }
     
@@ -171,32 +174,47 @@ class AddNoteViewController: UIViewController {
         })
     }
     
-    private func startRecordingTimers() {
-        levelGaugeTimer = Timer.scheduledTimer(timeInterval: 0.02, target: self, selector: #selector(self.levelTimerCallback), userInfo: nil, repeats: true)
-        endNoteTimer = Timer.scheduledTimer(timeInterval: 30, target: self, selector: #selector(self.endNoteTimerCallback), userInfo: nil, repeats: false)
+    fileprivate func startRecordingTimers() {
+        if levelGaugeTimer == nil {
+            levelGaugeTimer = Timer.scheduledTimer(timeInterval: 0.02, target: self, selector: #selector(self.levelTimerCallback), userInfo: nil, repeats: true)
+        }
+        if endNoteTimer == nil {
+            endNoteTimer = Timer.scheduledTimer(timeInterval: 30, target: self, selector: #selector(self.endNoteTimerCallback), userInfo: nil, repeats: false)
+        }
         
     }
     
     private func startPlaybackTimer() {
-        progressTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(self.updateProgress), userInfo: nil, repeats: true)
+        if progressTimer == nil {
+            progressTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(self.updateProgress), userInfo: nil, repeats: true)
+        }
     }
     
     fileprivate func invalidateTimers() {
-        for t in [levelGaugeTimer,endNoteTimer,progressTimer] {
-            if t != nil {
-                var timer = t
-                timer?.invalidate()
-                timer = nil
-            }
+        
+        if let _ = levelGaugeTimer {
+            levelGaugeTimer?.invalidate()
+            levelGaugeTimer = nil
         }
-    }
+        
+        if let _ = progressTimer {
+            progressTimer?.invalidate()
+            progressTimer = nil
+        }
+        
+        if let _ = endNoteTimer {
+            progressTimer?.invalidate()
+            progressTimer = nil
+        }
+        
+      }
 
 }
 
 extension AddNoteViewController: VoiceRecorderDelegate, VoicePlayerDelegate {
     
     func didStartRecording() {
-        //
+        levels = []
     }
     
     func didStopRecording() {

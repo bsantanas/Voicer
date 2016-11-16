@@ -42,27 +42,31 @@ class VoicePlayer: NSObject, AVAudioPlayerDelegate {
     init(file: URL) {
         self.file = file
         super.init()
-        prepareAudioPlayer()
     }
     
-    func prepareAudioPlayer() {
-        do {
+    func preparedAudioPlayer() -> AVAudioPlayer? {
+        
+         do {
             try audioPlayer = AVAudioPlayer(contentsOf: file)
             audioPlayer.delegate = self
             if !audioPlayer.prepareToPlay() {
                 print("Couldn't prepare player")
                 delegate?.playerWasCancelledWith(error: nil)
+                return nil
             }
-        } catch {
-            print("Couldn't open player")
+        } catch (let error) {
+            print("Couldn't open player \(error)")
+            return nil
         }
-        
+        return audioPlayer
     }
     
     func playVoiceNote() {
-        if !audioPlayer.play() {
-            print("Couldn't play note")
-            delegate?.playerWasCancelledWith(error: nil)
+        if let player = preparedAudioPlayer() {
+            if !player.play() {
+                print("Couldn't play note")
+                delegate?.playerWasCancelledWith(error: nil)
+            }
         }
     }
 

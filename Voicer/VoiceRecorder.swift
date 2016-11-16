@@ -23,6 +23,10 @@ class VoiceRecorder:NSObject, AVAudioRecorderDelegate {
     private var audioRecorder: AVAudioRecorder!
     private var prepared = false
     
+    var fileURL: URL {
+        return audioRecorder.url
+    }
+    
     var isRecording: Bool { if let _ = audioRecorder {
         return audioRecorder.isRecording
     } else {
