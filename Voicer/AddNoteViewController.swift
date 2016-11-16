@@ -242,10 +242,9 @@ class AddNoteViewController: UIViewController {
     fileprivate func removeRecordedFileFromDirectory() {
         let fileManager = FileManager.default
         do {
-            print(recorder.fileURL.absoluteString)
-            try fileManager.removeItem(atPath: recorder.fileURL.absoluteString)
-        } catch {
-            print("Could not delete file")
+            try fileManager.removeItem(atPath: recorder.fileURL.path)
+        } catch let error {
+            print("Could not delete file \(error)")
         }
     }
 

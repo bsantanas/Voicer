@@ -180,7 +180,13 @@ class VoiceGraphView: UIView {
     }
     
     func clearGraph() {
-        paths = []
-        setNeedsDisplay()
+        UIView.animate(withDuration: 0.2, animations: {
+            self.alpha = 0
+            }, completion: { finished in
+                self.paths = []
+                self.setNeedsDisplay()
+                self.alpha = 1
+        })
+        
     }
 }
