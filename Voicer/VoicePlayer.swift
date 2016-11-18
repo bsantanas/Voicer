@@ -9,65 +9,67 @@
 import UIKit
 import AVFoundation
 
-protocol VoicePlayerDelegate: class {
+@objc protocol VoicePlayerDelegate: class {
     func didStartPlaying()
     func didFinishPlaying()
     func playerWasCancelledWith(error:Error?)
+    @objc optional func progressChanged(progress:Float)
 }
+
+// MARK: - Voice Player Class
 
 class VoicePlayer: NSObject, AVAudioPlayerDelegate {
     
+    // Singleton
+    static let shared = VoicePlayer()
+    
+    // MARK: - Public API
+    
     weak var delegate: VoicePlayerDelegate?
-    var file: URL!
+    
     var isPlaying: Bool {
         return (audioPlayer != nil) ? audioPlayer!.isPlaying : false
     }
-    var currentPercentage: Float {
+    
+    func play(data: NSData) {
+        if audioPlayer == nil || audioPlayer?.data != data as Data {
+            if let player = preparedNewAudioPlayer(with: data as Data) {
+                audioPlayer = player
+                playCurrentAudio()
+            }
+        } else {
+            playCurrentAudio()
+        }
+    }
+    
+    func pause() {
+        if isPlaying {
+            audioPlayer?.stop()
+        }
+    }
+    
+    var progress:Float {
         get {
-            if let _ = audioPlayer, audioPlayer!.isPlaying {
+            if isPlaying {
                 return Float(audioPlayer!.currentTime/audioPlayer!.duration)
             }
             return 0
         }
+        
         set(pct) {
-            if let _ = audioPlayer {
-                if pct >= 0 && pct <= 1 {
+            if audioPlayer != nil && (pct >= 0 && pct <= 1) {
                     audioPlayer!.currentTime = TimeInterval(pct)*audioPlayer!.duration
                 }
             }
-        }
     }
     
+    // MARK: - Private
+    private var audioPlayer: AVAudioPlayer?
     private var isPrepared = false
-    private var audioPlayer: AVAudioPlayer!
+    private var timer: Timer?
     
-    //MARK: - Lifecycle
-    
-    init?(file: URL) {
-        super.init()
-        
-        guard let player = preparedNewAudioPlayer(with: file) else { return nil }
-        
-        self.file = file
-        self.audioPlayer = player
-        
-    }
-    
-    func playVoiceNote() {
-        if let player = audioPlayer {
-            if !player.play() {
-                print("Couldn't play note")
-                delegate?.playerWasCancelledWith(error: nil)
-            }
-        }
-    }
-    
-    func pauseVoiceNote() {
-        if let player = audioPlayer, audioPlayer!.isPlaying {
-            player.stop()
-        }
-    }
-    
+    private override init() { super.init() }
+
     private func preparedNewAudioPlayer(with url:URL) -> AVAudioPlayer? {
         var player: AVAudioPlayer?
         do {
@@ -81,7 +83,28 @@ class VoicePlayer: NSObject, AVAudioPlayerDelegate {
         }
         return player
     }
-
+    
+    private func preparedNewAudioPlayer(with data:Data) -> AVAudioPlayer? {
+        var player: AVAudioPlayer?
+        do {
+            try player = AVAudioPlayer(data: data)
+            player?.delegate = self
+            if !(player!.prepareToPlay()) {
+                print("Couldn't prepare player")
+            }
+        } catch (let error) {
+            print("Couldn't open player \(error)")
+        }
+        return player
+    }
+    
+    private func playCurrentAudio() {
+        if audioPlayer == nil || !(audioPlayer!.play()) {
+            print("Couldn't play from data")
+            delegate?.playerWasCancelledWith(error: nil)
+        }
+    }
+    
     // MARK: - AVAudioPlayer Delegate
     
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {

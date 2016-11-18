@@ -23,16 +23,7 @@ class AddNoteViewController: UIViewController {
     fileprivate var endNoteTimer: Timer?
     fileprivate var progressTimer: Timer?
     private var recorder: VoiceRecorder!
-    fileprivate var _player: VoicePlayer?
-    private var player: VoicePlayer? {
-        // Obj-C approach to enable safe access to the voice player
-        get {
-            if _player == nil {
-                _player = VoicePlayer(file: self.recorder.fileURL)
-            }
-            return _player
-        }
-    }
+    weak var player = VoicePlayer.shared
     var levels = [CGFloat]()
     
     // MARK: Lifecycle
@@ -101,7 +92,7 @@ class AddNoteViewController: UIViewController {
         case .began, .changed:
             let pct = Float(pan.location(in: graphView).x / graphView.frame.width)
             graphView.setTime(pct)
-            player!.currentPercentage = pct
+            player?.progress = pct
         default:
             return
         }
@@ -174,7 +165,7 @@ class AddNoteViewController: UIViewController {
     
     func updateProgress() {
 
-        if let pct = player?.currentPercentage {
+        if let pct = player?.progress {
             graphView.setTime(pct)
             if pct > 0.98 {
                 invalidateTimers()
@@ -187,10 +178,10 @@ class AddNoteViewController: UIViewController {
         
         if (!recorder.isRecording) {
             if player!.isPlaying {
-                player!.pauseVoiceNote()
+                player!.pause()
                 invalidateTimers()
             } else {
-                player!.playVoiceNote()
+                player!.play(data: note!.data)
                 startPlaybackTimer()
             }
         }
@@ -259,7 +250,6 @@ extension AddNoteViewController: VoiceRecorderDelegate, VoicePlayerDelegate {
     
     func didStartRecording() {
         progressTimer?.invalidate()
-        _player = nil
         levels = []
     }
     
