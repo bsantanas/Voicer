@@ -28,11 +28,10 @@ class VoiceGraphView: UIView {
     }
     
     func setBarsPathWith(levels:[CGFloat]) {
-        print(levels)
         var y = levels
         let min = y.min()
         let max = y.max()
-        guard max! - min! > 0 && y.count > 0 else { return }
+        guard y.count > 2 && max! - min! > 0 else { return }
         
         let drawingHeight = (bounds.height/2) * 0.9  // 90% of the drawable height
         

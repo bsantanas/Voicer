@@ -37,7 +37,6 @@ class FeedViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         tableView.estimatedRowHeight = 215
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.delegate = self
@@ -60,10 +59,6 @@ class FeedViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         recordButton.layer.cornerRadius = recordButton.frame.width/2
     }
-    
-    // MARK: User Actions
-    
-    
     
     // MARK: Instance methods
     
@@ -141,11 +136,15 @@ class FeedViewController: UIViewController {
     }
     
     func startRecording() {
+        let bar = self.navigationController?.navigationBar
+        UIView.transition(with: bar!, duration: 0.2, options: [.beginFromCurrentState, .transitionCrossDissolve], animations: { () -> Void in
+            bar!.barTintColor = Colors.red
+            }, completion: nil)
         self.overlay.isHidden = false
-        UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 5, options: [], animations: {
+        UIView.animate(withDuration: 0.2, animations: {
                 self.recordButton.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
             self.overlay.alpha = 1
-            }, completion: nil)
+            })
     }
     
     func stopRecordingAndPresentController() {

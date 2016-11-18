@@ -70,10 +70,12 @@ class AddNoteViewController: UIViewController {
     //MARK: - User Actions
     
     func recordingButtonTouchDown() {
-        recorder.startRecording()
         animateStartRecording()
-        startRecordingTimers()
-        
+        self.startRecordingTimers()
+        DispatchQueue.global(qos: .default).async {
+            self.recorder.startRecording()
+            
+        }
     }
     
     func recordingButtonTouchUpInside() {
